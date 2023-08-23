@@ -35,3 +35,27 @@ export const IMAGE_TEXT_LANTOAPHONGCACH = 'https://firebasestorage.googleapis.co
 export const BUTTON_BLUE = require('./background_button_blue.png')
 export const BUTTON_WHITE = require('./background_button_white.png')
 
+
+export const HOANTAT = 'https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/Frame%20625260.png?alt=media&token=0762723b-78a3-4a00-9d61-8ab372240eb1'
+export const MAP = require('./MAP.png')
+export const MAP_DH = require('./MAP-DH.png')
+export const HANOI = require('./HANOI.png')
+export const HOCHIMINH = require('./HOCHIMINH.png')
+export const THUONGHIEU = require('./THUONGHIEU.png')
+export const LOGO = require('./LOGO.png')
+export const DAUTIEN = require('./DAUTIEN.png')
+export const AOKHOAC = require('./card1.png')
+export const AOTHUN = require('./card3.png')
+export const NON= require('./card4.png')
+export const TUI = require('./card2.png')
+export const VO= require('./card5.png')
+export const TUIS = require('./card6.png')
+export const VE = require('./card7.png')
+export const BANNER1 = require('./banner_1.png')
+export const BANNER2 = require('./banner_2.png')
+export const BANNER3 = require('./banner_3.png')
+export const BANNER4 = require('./banner_4.png')
+export const QUAN7 = require('./QUAN7.png')
+export const PUREGIFT = require('./Puregift.png')
+export const BXH = require('./BXH.png')
+
