@@ -1,7 +1,7 @@
-import { StyleSheet, Dimensions, Text, View, TextProps, TouchableOpacity, Image } from 'react-native'
+import { StyleSheet, Dimensions, Text, View, TextProps, TouchableOpacity, Image, Pressable } from 'react-native'
 import React from 'react'
 import { Colors } from '../../resource/values/colors'
-import { LOGO_QUAFINA } from '../../../../assets'
+import { LOGO_QUAFINA } from '../../../assets/images'
 
 interface HeaderProps extends TextProps {
 
@@ -10,12 +10,13 @@ interface HeaderProps extends TextProps {
   //
   rightIcon?: React.ReactNode,
   rightFocus?: () => void,
-
+  //
+  centerFocus?: () => void,
 }
 
 const Header: React.FC<HeaderProps> = (props) => {
 
-  const {leftIcon, leftFocus, rightIcon, rightFocus} = props;
+  const {leftIcon, leftFocus, rightIcon, rightFocus, centerFocus} = props;
 
   const eventLeft = () => {
     if (leftIcon) {
@@ -43,9 +44,9 @@ const eventRight = () => {
       <View style={styles.headerFocus}>
           {eventLeft()}
       </View>
-      <View style={styles.centerHeader}>
+      <Pressable style={styles.centerHeader} onPress={centerFocus}>
           <Image source={{uri: LOGO_QUAFINA}} style = {styles.img}/>
-      </View>
+      </Pressable>
       <View style={styles.headerFocus}>
           {eventRight()}
       </View>
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Dimensions.get('screen').width * 0.02,
     alignItems: 'center',
     backgroundColor: Colors.WHITE,
-    marginTop: Dimensions.get('screen').height * 0.08 / 2,
+    marginTop: Dimensions.get('screen').height * 0.06 / 2,
   },
   headerFocus: {
     width: Dimensions.get('screen').width * 0.1,

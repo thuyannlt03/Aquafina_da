@@ -1,6 +1,6 @@
 import { ImageBackground, Pressable, StyleProp, StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native'
 import React from 'react'
-import { BUTTON_BLUE, BUTTON_WHITE } from '../../../../assets';
+import { BUTTON_BLUE, BUTTON_WHITE } from '../../../assets';
 
 export type ButtonLoginProps = {
     title: string;

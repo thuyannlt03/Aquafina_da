@@ -6,7 +6,7 @@ import { Colors } from '../../resource/values/colors'
 import { BUTTON_BLUE, BUTTON_WHITE, IMAGE_FOOTER_AUTHEN, IMAGE_TEXT_WELLCOME } from '../../../../assets'
 import {ButtonLogin, ButtonRegister} from '../../component/button/Button'
 import { TextField } from '../../component/textfield/TextField'
-import { AuthenStackScreenProps } from '../../navigaton/stack/AuthenNavigation'
+import { AuthenStackScreenProps } from '../../navigation/stack/AuthenNavigation'
 
 const Login: React.FC<AuthenStackScreenProps<'LogIn'>> = ({ navigation, route }) => {
 

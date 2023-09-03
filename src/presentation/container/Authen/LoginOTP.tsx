@@ -1,15 +1,16 @@
 import { StatusBar, Dimensions, ScrollView, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Header from '../../component/header/Header'
 import FoundationIcon from 'react-native-vector-icons/Foundation'
 import { Colors } from '../../resource/values/colors'
-import { BUTTON_BLUE, BUTTON_WHITE, IMAGE_FOOTER_AUTHEN, IMAGE_TEXT_WELLCOME } from '../../../../assets'
+import { BUTTON_BLUE, IMAGE_FOOTER_AUTHEN, IMAGE_TEXT_WELLCOME } from '../../../../assets'
 import { OTPField } from '../../component/textfield/TextField'
 import {ButtonLogin} from '../../component/button/Button'
 import LinearGradient from 'react-native-linear-gradient'
-import { AuthenStackScreenProps } from '../../navigaton/stack/AuthenNavigation'
+import { HomeDrawerScreenProps } from '../../navigation/drawer/DrawerNavigation'
 
-const SendOTP: React.FC<AuthenStackScreenProps<'LoginOTP'>> = ({ navigation, route }) => {
+
+const LoginOTP : React.FC<HomeDrawerScreenProps<'LoginOTP'>> = ({route, navigation}) => {
 
     const [isReSend, setIsReSend] = useState(true);
     const [time, setTime] = useState(30);
@@ -37,7 +38,7 @@ const SendOTP: React.FC<AuthenStackScreenProps<'LoginOTP'>> = ({ navigation, rou
     };
 
     const logIn = () => {
-        //navigation.navigate('LogIn');
+        navigation.navigate('Home');
     };
 
    
@@ -88,7 +89,7 @@ const SendOTP: React.FC<AuthenStackScreenProps<'LoginOTP'>> = ({ navigation, rou
     )
 }
 
-export default SendOTP
+export default LoginOTP
 
 const styles = StyleSheet.create({
     container: {

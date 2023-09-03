@@ -1,0 +1,134 @@
+{
+    "Banners": {
+        "Banner_1" : {
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/Image-Banner_1.png?alt=media&token=7b9baaa2-ae08-4ba5-ab1f-0dca0cdc3f3b"
+        },
+        "Banner_2" : {
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/Image-Banner_2.png?alt=media&token=86a52bfd-1915-4194-a2d7-efc38ffbdf94"
+        },
+        "Banner_3" : {
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/Image-Banner_3.png?alt=media&token=d6af4710-8d5d-40fd-937d-c602d2259520"
+        },
+        "Banner_4" : {
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/Image-Banner_4.png?alt=media&token=0952a1d0-1d3e-4203-9a36-dc1a8d1d7558"
+        }
+    },
+    "Gifts" :{
+        "Gift_1" :{
+            "name" : "Túi tote",
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/Image-Tui_Tote.png?alt=media&token=936dea63-c890-451f-baf0-8de9d458dc4e",
+            "type" : 1,
+            "use" : 2
+        },
+        "Gift_2" :{
+            "name" : "Áo thời trang",
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/Image-Ao_thun-W.png?alt=media&token=7421b4c2-331d-4efc-bfba-c27eafe2c6f8",
+            "type" : 1,
+            "use" : 7
+        },
+        "Gift_3" :{
+            "name" : "Vớ",
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/Image-Sock.png?alt=media&token=94600690-56cb-40d5-b89f-88d0874c6777",
+            "type" : 2,
+            "use" : 1
+        },
+        "Gift_4" :{
+            "name" : "Nón lưỡi trai",
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/Image-Non_Offwhite.png?alt=media&token=cecbb062-376b-42da-a8ee-7e575f3b9e4c",
+            "type" : 4,
+            "use" : 15
+        },
+        "Gift_5" :{
+            "name" : "Áo thời trang",
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/Image-Ao_thun-B.png?alt=media&token=9bf06194-f3cf-43c6-9d02-a158fc70c4fa",
+            "type" : 1,
+            "use" : 7
+        },
+        "Gift_6" :{
+            "name" : "Áo khoác cape",
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/Image-Ao_layer.png?alt=media&token=00f8af68-fe73-4d86-b43c-33f58910d22b",
+            "type" : 1,
+            "use" : 108
+        }
+    },
+    "Users": {
+        "User_1" : {
+            "name" : "Lê Quỳnh Ái Vân",
+            "phone" : "0767375921",
+            "avatar" : "https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/Image-Avatar_1.png?alt=media&token=3c0c9365-75d2-4d1d-bf38-c635b4650833",
+            "point" : 150,
+            "rank" : 100
+        },
+        "User_2" : {
+            "name" : "John Wick",
+            "phone" : "0767375921",
+            "avatar" : "https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/Image-Avatar_1.png?alt=media&token=3c0c9365-75d2-4d1d-bf38-c635b4650833",
+            "point" : 1000,
+            "rank" : 1
+        },
+        "User_3" : {
+            "name" : "John Wick",
+            "phone" : "0767375921",
+            "avatar" : "https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/Image-Avatar_1.png?alt=media&token=3c0c9365-75d2-4d1d-bf38-c635b4650833",
+            "point" : 999,
+            "rank" : 2
+        },
+        "User_4" : {
+            "name" : "John Wick",
+            "phone" : "0767375921",
+            "avatar" : "https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/Image-Avatar_2.png?alt=media&token=e7a9b5b5-1bd8-4c3c-83c2-2c7b644bbb8d",
+            "point" : 500,
+            "rank" : 3
+        },
+        "User_5" : {
+            "name" : "John Wick",
+            "phone" : "0767375921",
+            "avatar" : "https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/Image-Avatar_3.png?alt=media&token=133b9e89-50f3-4563-8f42-71e6999d1206",
+            "point" : 450,
+            "rank" : 4
+        },
+        "User_6" : {
+            "name" : "John Wick",
+            "phone" : "0767375921",
+            "avatar" : "https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/Image-Avatar_3.png?alt=media&token=133b9e89-50f3-4563-8f42-71e6999d1206",
+            "point" : 200,
+            "rank" : 5
+        },
+        "User_7" : {
+            "name" : "John Wick",
+            "phone" : "0767375921",
+            "avatar" : "https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/Image-Avatar_3.png?alt=media&token=133b9e89-50f3-4563-8f42-71e6999d1206",
+            "point" : 200,
+            "rank" : 6
+        },
+        "User_8" : {
+            "name" : "John Wick",
+            "phone" : "0767375921",
+            "avatar" : "https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/Image-Avatar_3.png?alt=media&token=133b9e89-50f3-4563-8f42-71e6999d1206",
+            "point" : 200,
+            "rank" : 7
+        },
+        "User_9" : {
+            "name" : "John Wick",
+            "phone" : "0767375921",
+            "avatar" : "https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/Image-Avatar_3.png?alt=media&token=133b9e89-50f3-4563-8f42-71e6999d1206",
+            "point" : 200,
+            "rank" : 8
+        },
+        "User_10" : {
+            "name" : "John Wick",
+            "phone" : "0767375921",
+            "avatar" : "https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/Image-Avatar_3.png?alt=media&token=133b9e89-50f3-4563-8f42-71e6999d1206",
+            "point" : 200,
+            "rank" : 9
+        },
+        "User_11" : {
+            "name" : "John Wick",
+            "phone" : "0767375921",
+            "avatar" : "https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/Image-Avatar.png?alt=media&token=87a9fb9e-d526-467d-9d38-a3379d281550",
+            "point" : 200,
+            "rank" : 10
+        }
+    }
+ 
+}

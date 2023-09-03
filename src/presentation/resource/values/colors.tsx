@@ -20,5 +20,16 @@ export const Colors = {
     BLUE_200:'rgba(153, 181, 227, 1)',
     BLUE: 'rgba(0, 70, 189, 1)',
     BG_SCREEN : 'rgba(232, 237, 242, 1)',
-    BG_CONTENT: 'rgba(240, 250, 255, 1)',
+    BG_CONTENT_1: 'rgba(240, 250, 255, 1)',
+    BG_CONTENT_0: 'rgba(240, 250, 255, 0)',
+    GRAY_TEXT: 'rgba(83, 82, 97, 1)',
+    TEXT_COIN: 'rgba(255, 184, 0, 1)',
+    WHITE_20: 'rgba(255, 255, 255, 0.2)',
+    BLUE_300: 'rgba(102, 145, 214, 1)',
+    BG_RANK_1: 'rgba(251, 211, 0, 1)',
+    BG_RANK_2: 'rgba(111, 132, 245, 1)',
+    BG_RANK_3: 'rgba(87, 183, 245, 1)',
+    GRAY_2: 'rgba(237, 237, 237, 1)',
+    BACKGROUND_PRIMARY: '#F5F5F5',
+    
   };

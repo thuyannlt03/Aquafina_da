@@ -3,12 +3,12 @@ import React, { useState } from 'react'
 import Header from '../../component/header/Header'
 import FoundationIcon from 'react-native-vector-icons/Foundation'
 import { Colors } from '../../resource/values/colors'
-import { BUTTON_WHITE, IMAGE_FOOTER_AUTHEN, IMAGE_TEXT_WELLCOME } from '../../../../assets'
-import {RegisterField } from '../../component/textfield/TextField'
-import {ButtonRegister} from '../../component/button/Button'
+import { BUTTON_BLUE, BUTTON_WHITE, IMAGE_FOOTER_AUTHEN, IMAGE_TEXT_WELLCOME } from '../../../../assets'
+
+import {ButtonLogin} from '../../component/button/Button'
 import { AuthenStackScreenProps } from '../../navigation/stack/AuthenNavigation'
 
-const Register: React.FC<AuthenStackScreenProps<'Register'>> = ({ navigation, route }) => {
+const RegisterSuccess : React.FC<AuthenStackScreenProps<'RegisterSuccess'>> = ({ navigation, route }) => {
 
     const [phone, setPhone] = useState('');
 
@@ -16,58 +16,43 @@ const Register: React.FC<AuthenStackScreenProps<'Register'>> = ({ navigation, ro
 
     };
 
-    const register = () => {
-        navigation.navigate('RegisterOTP', {
-            phone: phone
-        })
+    const Login = () => {
+        navigation.navigate('LogIn')
     };
-
-    return (
-        <ScrollView>
-            <StatusBar barStyle={'light-content'} translucent />
-            <View style={styles.container}>
-                <Header
-                    leftIcon={
-                        <FoundationIcon name="home" size={30} color={Colors.GRAY_5} />
-                    }
-                    leftFocus={goHome}
-                />
-                <View style={styles.viewImge}>
-                    <Image source={{ uri: IMAGE_TEXT_WELLCOME }} style={styles.imgWellcome} />
-                </View>
-                <Text style={styles.txtLogin}>ĐĂNG KÝ</Text>
-                <RegisterField
-               inputProps_1={{
-              
-              }}
-              
-                title='Số điện thoại'
-                placeholder='Nhập số điện thoại của bạn'
-                inputProps_2={{
-                    onChangeText: (text) => { setPhone(text) }
-                }}
-                
-               />
-              
-                <View style={styles.footer}>
+  return (
+    <ScrollView>
+    <StatusBar barStyle={'light-content'} translucent />
+    <View style={styles.container}>
+        <Header
+            leftIcon={
+                <FoundationIcon name="home" size={30} color={Colors.GRAY_5} />
+            }
+            leftFocus={goHome}
+        />
+        <View style={styles.viewImge}>
+            <Image source={{ uri: IMAGE_TEXT_WELLCOME }} style={styles.imgWellcome} />
+        </View>
+        <Text style={styles.txtLogin}>ĐĂNG KÝ THÀNH CÔNG</Text>
+        <Text style={styles.des}>Vui lòng đăng nhập để bắt đầu chương trình</Text>
+        <View style={styles.footer}>
                     <Image source={{ uri: IMAGE_FOOTER_AUTHEN }} style={styles.imgFooter} />
                     <View style={styles.boxButton}>
                     <View style={styles.Button}>
-                        <ButtonRegister
-                           backgroundImage={BUTTON_WHITE}
-                           titleStyle={styles.titleRegister}
-                           title='Đăng kí'
-                            onPress={register}
+                        <ButtonLogin
+                           backgroundImage={BUTTON_BLUE}
+                           titleStyle={styles.titleLogin}
+                           title='Đăng nhập'
+                            onPress={Login}
                         />
                         </View>
                     </View>
                 </View>
             </View>
         </ScrollView>
-    )
+  )
 }
 
-export default Register
+export default RegisterSuccess
 
 const styles = StyleSheet.create({
     container: {
@@ -105,7 +90,7 @@ const styles = StyleSheet.create({
     imgFooter: {
         resizeMode: 'contain',
         width: Dimensions.get('screen').width,
-        height: Dimensions.get('screen').height * 0.42,
+        height: Dimensions.get('screen').height * 0.45,
 
     },
     boxButton: {
@@ -128,18 +113,13 @@ const styles = StyleSheet.create({
     titleLogin: {
         color: Colors.WHITE,
     },
-    txtOr: {
+    des: {
         textAlign: 'center',
-        fontSize: 11,
-        fontWeight: '500',
-        lineHeight: 13.2,
+        width: '100%',
         color: Colors.GRAY_5,
-        marginVertical: Dimensions.get('screen').height * 0.01,
+        fontSize: 14,
+        lineHeight: 36,
+        marginBottom: '5%',
+        fontWeight: '400'
     },
-    btnRegister: {
-        backgroundColor: Colors.GRAY_1,
-    },
-    titleRegister: {
-        color: Colors.BLUE_KV,
-    }
 })

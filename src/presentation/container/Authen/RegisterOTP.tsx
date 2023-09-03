@@ -7,9 +7,9 @@ import { BUTTON_BLUE, BUTTON_WHITE, IMAGE_FOOTER_AUTHEN, IMAGE_TEXT_WELLCOME } f
 import { OTPField } from '../../component/textfield/TextField'
 import {ButtonLogin} from '../../component/button/Button'
 import LinearGradient from 'react-native-linear-gradient'
-import { AuthenStackScreenProps } from '../../navigaton/stack/AuthenNavigation'
+import { AuthenStackScreenProps } from '../../navigation/stack/AuthenNavigation'
 
-const SendOTP: React.FC<AuthenStackScreenProps<'RegisterOTP'>> = ({ navigation, route }) => {
+const RegisterOTP: React.FC<AuthenStackScreenProps<'RegisterOTP'>> = ({ navigation, route }) => {
 
     const [isReSend, setIsReSend] = useState(true);
     const [time, setTime] = useState(30);
@@ -36,8 +36,8 @@ const SendOTP: React.FC<AuthenStackScreenProps<'RegisterOTP'>> = ({ navigation, 
 
     };
 
-    const logIn = () => {
-        navigation.navigate('LogIn');
+    const RegisterSuccess = () => {
+        navigation.navigate('RegisterSuccess');
     };
 
   
@@ -66,7 +66,7 @@ const SendOTP: React.FC<AuthenStackScreenProps<'RegisterOTP'>> = ({ navigation, 
                            backgroundImage={BUTTON_BLUE}
                            titleStyle={styles.titleLogin}
                            title='Xác nhận'
-                           onPress={logIn}
+                           onPress={RegisterSuccess}
                         />
                         </View>
                         {
@@ -88,7 +88,7 @@ const SendOTP: React.FC<AuthenStackScreenProps<'RegisterOTP'>> = ({ navigation, 
     )
 }
 
-export default SendOTP
+export default RegisterOTP
 
 const styles = StyleSheet.create({
     container: {
