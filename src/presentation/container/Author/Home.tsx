@@ -1,25 +1,34 @@
-import { StyleSheet, Text, View, Image, Dimensions } from 'react-native'
-import React, { useEffect } from 'react'
+import { StyleSheet, Text, View, Image, Dimensions, Modal, Pressable } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import Background from '../../component/background/Background'
 import SnapCarousel from '../../component/carousel/SnapCarusel'
 import Swiper from 'react-native-swiper'
 import { Banners } from '../../../domain/entity/Banner'
 import { useSelector } from 'react-redux'
-import { RootState, useAppDispatch } from '../../shared-state/redux/store'
+import { RootState,  useAppDispatch } from '../../shared-state/redux/store'
 import {  getUsers } from '../../shared-state/redux/reducers/UserReducer'
+import { signOut} from '../../shared-state/redux/reducers'
 import { getBannsers } from '../../shared-state/redux/reducers/BannerReducer'
 import { Colors } from '../../resource/values/colors'
-import { BUTTON_BLUE, IMAGE_BANNER_4, IMAGE_BG_BG_COIN, IMAGE_MAP_HOME, IMAGE_STROKE_AQUFINA_TOP, IMAGE_TEXT_XANK, IMAGE_TONG_CHAI_THU_DUOC } from '../../../../assets'
-import { ButtonLogin} from '../../component/button/Button'
-import { Chart } from '../../component/chart'
+import { ButtonLogin } from '../../component/button/Button'
+import { BUTTON_BLUE, IMAGE_BG_BG_COIN, IMAGE_MAP_HOME, IMAGE_POPUP_HAPPY, IMAGE_TEXT_XANK, IMAGE_TONG_CHAI_THU_DUOC } from '../../../../assets'
+import { Chart } from '../../component/chart/Chart'
 import { Users } from '../../../domain/entity/Users'
 import Footer from '../../component/footer/Footer'
 import { HomeDrawerScreenProps } from '../../navigation/drawer/DrawerNavigation'
+import { DialogLogIn, DialogLogOut } from '../../component/dialog/Dialog'
 
 const Home: React.FC<HomeDrawerScreenProps<'Home'>> = ({ route, navigation }) => {
-    // const Home = () => {
 
     const dispatch = useAppDispatch();
+
+    const isLogin: boolean = useSelector<RootState, boolean>(
+        (state) => state.user.isLogin
+    )
+
+    const [showPopupHappy, setShowPopupHappy] = useState(isLogin);
+    const [showPopupLogOut, setShowPopupLogOut] = useState(false);
+    const [showPopupLogIn, setShowPopupLogIn] = useState(false);
 
     const listBanner: Banners[] = useSelector<RootState, Banners[]>(
         (state) => state.banner.banners
@@ -29,9 +38,20 @@ const Home: React.FC<HomeDrawerScreenProps<'Home'>> = ({ route, navigation }) =>
         (state) => state.user.usersData
     );
 
+
+    const user: Users = useSelector<RootState, Users>(
+        (state) => state.user.userData
+    )
+
     useEffect(() => {
         dispatch(getBannsers());
-        dispatch(getUsers(5));
+
+        dispatch(getUsers(11));
+
+        if (isLogin) {
+            setShowPopupHappy(true);
+        }
+
         return () => { }
     }, [])
 
@@ -40,25 +60,74 @@ const Home: React.FC<HomeDrawerScreenProps<'Home'>> = ({ route, navigation }) =>
     }
 
     const logOut = () => {
-        navigation.navigate('LogIn')
+        dispatch(signOut());
+        navigation.navigate('Home');
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+        });
     };
 
-    const goHome = () => {
-        console.log(123)
-    };
+
+    const goChart = () => {
+        if (isLogin) {
+            navigation.navigate('PureChart')
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'PureChart' }],
+            });
+        }
+        else {
+            setShowPopupLogIn(true);
+        }
+    }
+
+    const goCoin = () => {
+        if (isLogin) {
+            navigation.navigate('PureCoin')
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'PureCoin' }],
+            });
+        }
+        else{
+            setShowPopupLogIn(true);
+        }
+    }
+    
+    const goGift = () => {
+        navigation.navigate('PureGift')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'PureGift' }],
+        });
+    }
+    const goMap = () => {
+        navigation.navigate('PureMap')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'PureMap' }],
+        });
+    }
+    const goWorld = () => {
+        navigation.navigate('PureWorld')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'PureWorld' }],
+        });
+    }
+
 
     return (
         <Background
             type='home'
-            centerFocus={goHome}
             leftFocus={menu}
-            rightFocus={logOut}
+            rightFocus={isLogin ? () => setShowPopupLogOut(true) : () => navigation.navigate('LogIn')}
         >
             <View style={styles.container}>
                 <View style={styles.boxbanner}>
-
+                    {/* @ts-ignore */}
                     <Swiper
-
                         autoplayTimeout={3}
                         autoplay
                         loop
@@ -74,23 +143,26 @@ const Home: React.FC<HomeDrawerScreenProps<'Home'>> = ({ route, navigation }) =>
                         }
                     </Swiper>
                     <View style={styles.boxButton}>
-                        <View style={styles.Button}>
+                    <View style={styles.Button}>
                             <ButtonLogin
-
                                 backgroundImage={BUTTON_BLUE}
                                 title='Tìm hiểu thêm'
-                                titleStyle={styles.textBanner} />
+                                titleStyle={styles.textBanner} 
+                                onPress={()=> navigation.navigate('PureWorld')}/>
                         </View>
-                    </View>
+                        </View>
+                       
                 </View>
                 <View style={styles.boxSumBottle}>
                     {/* <Image source={{ uri: IMAGE_STROKE_AQUFINA_TOP }} style={styles.imageStrokeAqua} /> */}
                     <Image source={{ uri: IMAGE_TONG_CHAI_THU_DUOC }} style={styles.imageSumBottle} />
                 </View>
                 <Chart
-                    isLogin={false}
-                    listData={listUsers}
+                    isLogin={isLogin}
+                    listData={listUsers.slice(0, 5)}
+                    dataUser={user}
                     where='home'
+                    onPress={isLogin ? goChart : () => navigation.navigate('LogIn')}
                 />
                 <View style={styles.boxGift} >
                     <Image source={{ uri: IMAGE_BG_BG_COIN }} style={styles.imageBGBG} />
@@ -103,6 +175,7 @@ const Home: React.FC<HomeDrawerScreenProps<'Home'>> = ({ route, navigation }) =>
 
                     <SnapCarousel
                         isShowPagination='flex'
+                        onPress={()=> navigation.navigate('PureGift')}
                     />
                 </View>
                 <View style={styles.boxMap}>
@@ -112,18 +185,50 @@ const Home: React.FC<HomeDrawerScreenProps<'Home'>> = ({ route, navigation }) =>
                             <ButtonLogin
                                 backgroundImage={BUTTON_BLUE}
                                 title='Khám phá ngay'
-                                titleStyle={styles.textBanner} />
+                                titleStyle={styles.textBanner} 
+                                onPress={()=> navigation.navigate('PureMap')}/>
                         </View>
                     </View>
                 </View>
                 <Footer
-                    onPress_PureChart={() => navigation.navigate('PureChart')}
-                    onPress_PureCoin={() => navigation.navigate('PureCoin')}
-                    onPress_PureGift={() => navigation.navigate('PureGift')}
-                    onPress_PureMap={() => navigation.navigate('PureMap')}
-                    onPress_PureWorld={() => navigation.navigate('PureWorld')}
+                    onPress_PureChart={goChart}
+                    onPress_PureCoin={goCoin}
+                    onPress_PureGift={goGift}
+                    onPress_PureMap={goMap}
+                    onPress_PureWorld={goWorld}
+                    onPressReport={() => navigation.navigate('ReportError')}
                 />
             </View>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={false}>
+                <View style={styles.boxNotifi}>
+                    <Pressable onPress={() => setShowPopupHappy(false)}>
+                        <Image source={{ uri: IMAGE_POPUP_HAPPY }} style={styles.imagePopupHappy} />
+                    </Pressable>
+                </View>
+            </Modal>
+
+            <DialogLogOut
+                isVisible={showPopupLogOut}
+                onPressCancel={() => setShowPopupLogOut(false)}
+                onPressLogout={logOut}
+            />
+
+            <DialogLogIn
+                isVisible={showPopupLogIn}
+                onPressCancel={() => setShowPopupLogIn(false)}
+                onPressLogIn={() => {
+                    setShowPopupLogIn(false);
+                    navigation.navigate('LogIn');
+                    navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'Home' }],
+                    });
+                }}
+            />
         </Background>
     )
 }
@@ -141,15 +246,19 @@ const styles = StyleSheet.create({
         height: Dimensions.get('screen').height * 0.70,
         backgroundColor: Colors.BACKGROUND_PRIMARY
     },
-    pagination: {
-        marginBottom: - Dimensions.get('screen').height * 0.01
-    },
     imageBanner: {
         resizeMode: 'contain',
         width: Dimensions.get('screen').width,
         height: Dimensions.get('screen').height * 0.7,
     },
-
+    buttonBanner: {
+        position: 'absolute',
+        width: Dimensions.get('screen').width * 0.35,
+        height: Dimensions.get('screen').height * 0.05,
+        backgroundColor: Colors.BLUE_500,
+        bottom: Dimensions.get('screen').height * 0.06,
+        borderColor: Colors.BLUE_500,
+    },
     boxButton: {
 
         position: 'absolute',
@@ -242,5 +351,19 @@ const styles = StyleSheet.create({
     },
     boxMap: {
         alignItems: 'center',
-    }
+    },
+    boxNotifi: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+    },
+    imagePopupHappy: {
+        resizeMode: 'contain',
+        width: Dimensions.get('screen').width * 0.8,
+        height: Dimensions.get('screen').height * 0.5
+    },
+    pagination: {
+        marginBottom: - Dimensions.get('screen').height * 0.01
+    },
 })

@@ -1,50 +1,45 @@
-import { StatusBar, StyleSheet, Text, TouchableOpacity, View, ScrollView, Image, Dimensions, FlatList } from 'react-native'
+import { StyleSheet, Text, View, Dimensions, } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Colors } from '../../resource/values/colors'
 import Footer from '../../component/footer/Footer'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import { Users } from '../../../domain/entity/Users'
-import { rtdb } from '../../../core/api/RealTimeDatabase'
-import { Chart } from '../../component/chart/Chart'
 import Background from '../../component/background/Background'
 import { HomeDrawerScreenProps } from '../../navigation/drawer/DrawerNavigation'
+import { useSelector } from 'react-redux'
+import { RootState,  useAppDispatch } from '../../shared-state/redux/store'
+import {  getUsers } from '../../shared-state/redux/reducers/UserReducer'
+import { signOut} from '../../shared-state/redux/reducers'
+import { DialogLogIn, DialogLogOut } from '../../component/dialog/Dialog'
+import { Chart } from '../../component/chart/Chart'
 
 
-const PureChart: React.FC<HomeDrawerScreenProps<'PureChart'>> = ({route, navigation}) => {
+const PureChart: React.FC<HomeDrawerScreenProps<'PureChart'>> = ({ route, navigation }) => {
 
-    const [activeDay, setActiveDay] = useState(1);
-    const [listUsers, setListUsers] = useState<Users[]>([]);
+    const [showPopupLogOut, setShowPopupLogOut] = useState(false);
+    const [showPopupLogIn, setShowPopupLogIn] = useState(false);
+    const dispatch = useAppDispatch();
+
+
+    const isLogin: boolean = useSelector<RootState, boolean>(
+        (state) => state.user.isLogin
+    )
+
+    const user: Users = useSelector<RootState, Users>(
+        (state) => state.user.userData
+    )
+
+    const listUsers: Users[] = useSelector<RootState, Users[]>(
+        (state) => state.user.usersData
+    );
 
     useEffect(() => {
+        dispatch(getUsers(10));
+        return () => {
 
-        const getUsers = async () => {
-            const users = await firebaseConfig.ref('/Users')
-                .once('value', (value: any) => {
-                    let list: Users[] = [];
-                    value.forEach((item: any) => {
-                        if (item.val().rank <= 10) {
-                            let user: Users = {
-                                keyUser: "1",
-                                rank: 0,
-                            }
-                            user.keyUser = item.key;
-                            user.avatar = item.val().avatar;
-                            user.name = item.val().name;
-                            user.phone = item.val().phone;
-                            user.point = item.val().point;
-                            user.rank = item.val().rank;
-                            list.push(user);
-                        }
-                    });
-                    list.sort((a, b) => a.rank - b.rank);
-                    setListUsers(list);
-                })
-        };
-
-        getUsers();
-
-        return () => { }
+        }
     }, [])
+
 
 
     const menu = () => {
@@ -52,42 +47,158 @@ const PureChart: React.FC<HomeDrawerScreenProps<'PureChart'>> = ({route, navigat
     }
 
     const logOut = () => {
-        navigation.navigate('LogIn')
+        dispatch(signOut());
+        navigation.navigate('Home');
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+        });
     };
 
     const goHome = () => {
-        console.log(123)
+        navigation.navigate('Home')
     };
+
+    const goChart = () => {
+        if (isLogin) {
+            navigation.navigate('PureChart')
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'PureChart' }],
+            });
+        }
+        else {
+            setShowPopupLogIn(true);
+        }
+    }
+
+    const goCoin = () => {
+        if (isLogin) {
+            navigation.navigate('PureCoin')
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'PureCoin' }],
+            });
+        }
+        else {
+            setShowPopupLogIn(true);
+        }
+    }
+
+    const goGift = () => {
+        navigation.navigate('PureGift')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'PureGift' }],
+        });
+    }
+    const goMap = () => {
+        navigation.navigate('PureMap')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'PureMap' }],
+        });
+    }
+    const goWorld = () => {
+        navigation.navigate('PureWorld')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'PureWorld' }],
+        });
+    }
+
+    const [activeDay, setActiveDay] = useState(1);
+    const DATADATE = [
+        {
+            "id": 1,
+            "name": "06/2022 Tuần 1"
+        },
+        {
+            "id": 2,
+            "name": "06/2022 Tuần 2"
+        },
+        {
+            "id": 3,
+            "name": "06/2022 Tuần 3"
+        },
+        {
+            "id": 4,
+            "name": "06/2022 Tuần 4"
+        },
+        {
+            "id": 5,
+            "name": "06/2022 Tuần 5"
+        },
+        {
+            "id": 6,
+            "name": "06/2022 Tuần 6"
+        },
+        {
+            "id": 7,
+            "name": "06/2022 Tuần 7"
+        },
+        {
+            "id": 8,
+            "name": "06/2022 Tuần 8"
+        },
+        {
+            "id": 9,
+            "name": "06/2022 Tuần 9"
+        },
+        {
+            "id": 10,
+            "name": "06/2022 Tuần 10"
+        },
+    ]
 
     return (
         <Background
             type='home'
             centerFocus={goHome}
             leftFocus={menu}
-            rightFocus={logOut}
+            rightFocus={isLogin ? () => setShowPopupLogOut(true) : () => navigation.navigate('LogIn')}
         >
             <View style={styles.container}>
                 <Chart
-                    isLogin={false}
+                    isLogin={isLogin}
                     listData={listUsers}
-                    where='home'
+                    dataUser={user}
+                    where='pure'
                 />
-                <View style={styles.boxQuantity}>
+                {/* <View style={styles.boxQuantity}>
                     <MaterialIcon name='arrow-back-ios-new' color={Colors.BLUE_KV} size={20} />
                     <Text style={styles.textQuantity_1}>1</Text>
                     <Text style={styles.textQuantity}>2</Text>
                     <Text style={styles.textQuantity}>...</Text>
                     <Text style={styles.textQuantity}>10</Text>
                     <MaterialIcon name='arrow-forward-ios' color={Colors.BLUE_KV} size={20} />
-                </View>
+                </View> */}
                 <Footer
-                onPress_PureChart={() => navigation.navigate('PureChart')}
-                onPress_PureCoin={() => navigation.navigate('PureCoin')}
-                onPress_PureGift={() => navigation.navigate('PureGift')}
-                onPress_PureMap={() => navigation.navigate('PureMap')}
-                onPress_PureWorld={() => navigation.navigate('PureWorld')}
+                    onPress_PureChart={goChart}
+                    onPress_PureCoin={goCoin}
+                    onPress_PureGift={goGift}
+                    onPress_PureMap={goMap}
+                    onPress_PureWorld={goWorld}
+                    onPressReport={() => navigation.navigate('ReportError')}
                 />
             </View>
+            <DialogLogOut
+                isVisible={showPopupLogOut}
+                onPressCancel={() => setShowPopupLogOut(false)}
+                onPressLogout={logOut}
+            />
+            <DialogLogIn
+                isVisible={showPopupLogIn}
+                onPressCancel={() => setShowPopupLogIn(false)}
+                onPressLogIn={() => {
+                    setShowPopupLogIn(false);
+                    navigation.navigate('LogIn');
+                    navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'Home' }],
+                    });
+                }}
+            />
         </Background>
 
     )
@@ -101,116 +212,6 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.WHITE,
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    boxChart: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: Colors.BLUE_KV,
-        marginTop: Dimensions.get('screen').height * 0.03
-    },
-    boxTitle: {
-        width: Dimensions.get('screen').width * 0.5,
-        height: Dimensions.get('screen').height * 0.04,
-        backgroundColor: Colors.BLUE_300,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 7,
-        marginTop: - Dimensions.get('screen').height * 0.02
-    },
-    textTitle: {
-        fontSize: 18,
-        fontWeight: '700',
-        lineHeight: 21.6,
-        color: Colors.WHITE
-    },
-    imageBGBGCoin: {
-        position: 'absolute',
-        resizeMode: 'contain',
-        width: Dimensions.get('screen').width * 0.7,
-        height: Dimensions.get('screen').height * 0.6,
-        end: Dimensions.get('screen').width * 0.7,
-        top: '-5%',
-        opacity: 0.5,
-        zIndex: 1
-    },
-    listDay: {
-        marginVertical: Dimensions.get('screen').height * 0.03,
-    },
-    itemDay: {
-        borderWidth: 1,
-        borderColor: Colors.WHITE,
-        padding: Dimensions.get('screen').width * 0.02,
-        borderRadius: 3,
-        marginEnd: Dimensions.get('screen').width * 0.05
-    },
-    itemDayChoose: {
-        borderWidth: 1,
-        borderColor: Colors.WHITE,
-        padding: Dimensions.get('screen').width * 0.02,
-        borderRadius: 3,
-        marginEnd: Dimensions.get('screen').width * 0.05,
-        backgroundColor: Colors.WHITE,
-    },
-    textDay: {
-        fontSize: 14,
-        fontWeight: '500',
-        lineHeight: 16.8,
-        color: Colors.WHITE,
-    },
-    textDayChoose: {
-        fontSize: 14,
-        fontWeight: '500',
-        lineHeight: 16.8,
-        color: Colors.BLUE_KV,
-    },
-    textHangCuaToi: {
-        fontSize: 14,
-        fontWeight: '500',
-        lineHeight: 16.8,
-        color: Colors.WHITE,
-        margin: Dimensions.get('screen').height * 0.005
-    },
-    boxMyrank: {
-        width: Dimensions.get('screen').width * 0.8,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        borderWidth: 1,
-        borderColor: Colors.WHITE,
-        backgroundColor: Colors.WHITE_20,
-        borderRadius: 6,
-        padding: Dimensions.get('screen').width * 0.02,
-        margin: Dimensions.get('screen').height * 0.01
-    },
-    left: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    textRank: {
-        fontSize: 11,
-        fontWeight: '500',
-        lineHeight: 13.2,
-        color: Colors.WHITE,
-    },
-    imageUser: {
-        resizeMode: 'contain',
-        width: Dimensions.get('screen').width * 0.07,
-        height: Dimensions.get('screen').width * 0.07,
-        marginStart: Dimensions.get('screen').width * 0.03,
-    },
-    textName: {
-        marginStart: Dimensions.get('screen').width * 0.03,
-        fontSize: 11,
-        fontWeight: '500',
-        lineHeight: 13.2,
-        color: Colors.WHITE,
-    },
-    textPoint: {
-        textAlignVertical: 'center',
-        fontSize: 11,
-        fontWeight: '500',
-        lineHeight: 13.2,
-        color: Colors.WHITE,
     },
     boxQuantity: {
         flexDirection: 'row',

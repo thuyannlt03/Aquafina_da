@@ -1,40 +1,107 @@
-import { Dimensions, Image, ImageBackground, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect } from 'react'
-
+import { Dimensions, Image, ImageBackground, StyleSheet, Text, View } from 'react-native'
+import React, { useState } from 'react'
 import { Colors } from '../../resource/values/colors'
-import IonIcon from 'react-native-vector-icons/Ionicons'
 import Footer from '../../component/footer/Footer'
 import FeatherIcon from 'react-native-vector-icons/Feather'
 import { IMAGE_AVATAR, IMAGE_BG_BG_COIN, IMAGE_BG_COIN, IMAGE_STROKE_AQUFINA_BOTTOM } from '../../../../assets'
-
 import Background from '../../component/background/Background'
-import { HomeDrawerScreenProps } from '../../navigation/drawer/DrawerNavigation'
+import { HomeDrawerScreenProps } from '../../navigations/drawer/DrawerNavigation'
+import { RootState,  useAppDispatch } from '../../shared-state/redux/store'
+import { signOut} from '../../shared-state/redux/reducers'
+import { useSelector } from 'react-redux'
+import { DialogLogIn, DialogLogOut } from '../../component/dialog/Dialog'
+import { Users } from '../../../domain/entity/Users'
 
-const PureCoin : React.FC<HomeDrawerScreenProps<'PureCoin'>> = ({route, navigation}) => {
+const PureCoin: React.FC<HomeDrawerScreenProps<'PureCoin'>> = ({ route, navigation }) => {
+
+    const dispatch = useAppDispatch();
+    const [showPopupLogOut, setShowPopupLogOut] = useState(false);
+    const [showPopupLogIn, setShowPopupLogIn] = useState(false);
+
+    const isLogin: boolean = useSelector<RootState, boolean>(
+        (state) => state.user.isLogin
+    )
+
+    const user: Users = useSelector<RootState, Users>(
+        (state) => state.user.userData
+    )
 
     const menu = () => {
         navigation.openDrawer();
     }
 
     const logOut = () => {
-        navigation.navigate('LogIn')
+        dispatch(signOut());
+        navigation.navigate('Home');
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+        });
     };
 
     const goHome = () => {
-        console.log(123)
+        navigation.navigate('Home')
     };
+
+    const goChart = () => {
+        if (isLogin) {
+            navigation.navigate('PureChart')
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'PureChart' }],
+            });
+        }
+        else {
+            setShowPopupLogIn(true);
+        }
+    }
+
+    const goCoin = () => {
+        if (isLogin) {
+            navigation.navigate('PureCoin')
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'PureCoin' }],
+            });
+        }
+        else{
+            setShowPopupLogIn(true);
+        }
+    }
+    
+    const goGift = () => {
+        navigation.navigate('PureGift')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'PureGift' }],
+        });
+    }
+    const goMap = () => {
+        navigation.navigate('PureMap')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'PureMap' }],
+        });
+    }
+    const goWorld = () => {
+        navigation.navigate('PureWorld')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'PureWorld' }],
+        });
+    }
 
     return (
         <Background
             type='home'
             centerFocus={goHome}
             leftFocus={menu}
-            rightFocus={logOut}
+            rightFocus={isLogin ? () => setShowPopupLogOut(true) : () => navigation.navigate('LogIn')}
         >
             <View style={styles.container}>
                 <Text style={styles.textTitle} >Thông tin người chơi</Text>
                 <View style={styles.boxImage}>
-                    <ImageBackground source={{ uri: IMAGE_AVATAR }} style={styles.imageAvatar} >
+                    <ImageBackground source={{ uri: user.avatar }} style={styles.imageAvatar} >
                         <View style={{ width: '65%', height: '100%' }}></View>
                         <View style={styles.boxCamera}>
                             <FeatherIcon name='camera' color={Colors.WHITE} size={12} />
@@ -48,7 +115,7 @@ const PureCoin : React.FC<HomeDrawerScreenProps<'PureCoin'>> = ({route, navigati
                             Họ và tên
                         </Text>
                         <Text style={styles.textInfor}>
-                            Lê Quỳnh Ái Vân
+                            {user.name}
                         </Text>
                     </View>
                     <View style={styles.boxInfor}>
@@ -56,7 +123,7 @@ const PureCoin : React.FC<HomeDrawerScreenProps<'PureCoin'>> = ({route, navigati
                             Số điện thoại
                         </Text>
                         <Text style={styles.textInfor}>
-                            0112345678
+                            {user.phone}
                         </Text>
                     </View>
                     <View style={styles.boxCoin}>
@@ -65,7 +132,7 @@ const PureCoin : React.FC<HomeDrawerScreenProps<'PureCoin'>> = ({route, navigati
                                 Số Điểm tích lũy:
                             </Text>
                             <Text style={styles.textCoinUser}>
-                                150
+                                {user.point}
                             </Text>
                         </ImageBackground>
                     </View>
@@ -82,13 +149,31 @@ const PureCoin : React.FC<HomeDrawerScreenProps<'PureCoin'>> = ({route, navigati
                 </Text>
                 <Image source={{ uri: IMAGE_STROKE_AQUFINA_BOTTOM }} style={styles.strokeAquafina} />
                 <Footer
-                onPress_PureChart={() => navigation.navigate('PureChart')}
-                onPress_PureCoin={() => navigation.navigate('PureCoin')}
-                onPress_PureGift={() => navigation.navigate('PureGift')}
-                onPress_PureMap={() => navigation.navigate('PureMap')}
-                onPress_PureWorld={() => navigation.navigate('PureWorld')}
+                    onPress_PureChart={goChart}
+                    onPress_PureCoin={goCoin}
+                    onPress_PureGift={goGift}
+                    onPress_PureMap={goMap}
+                    onPress_PureWorld={goWorld}
+                    onPressReport={() => navigation.navigate('ReportError')}
                 />
             </View>
+            <DialogLogOut
+                isVisible={showPopupLogOut}
+                onPressCancel={() => setShowPopupLogOut(false)}
+                onPressLogout={logOut}
+            />
+            <DialogLogIn
+                isVisible={showPopupLogIn}
+                onPressCancel={() => setShowPopupLogIn(false)}
+                onPressLogIn={() => {
+                    setShowPopupLogIn(false);
+                    navigation.navigate('LogIn');
+                    navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'Home' }],
+                    });
+                }}
+            />
         </Background>
 
     )

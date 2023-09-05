@@ -1,35 +1,98 @@
-import { Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-
+import { Dimensions, Image, StyleSheet, Text, View } from 'react-native'
+import React, { useState } from 'react'
 import LinearGradient from 'react-native-linear-gradient'
-import { Colors } from '../../resource/values/colors'
+import { Colors } from '../../resource'
 import { BUTTON_BLUE, IMAGE_BG_DOITAC, IMAGE_MAP, IMAGE_PURE_MAP, IMAGE_THUNG_CHUA, LOGO_COOPMART, LOGO_LOTTEMART } from '../../../../assets'
 import Footer from '../../component/footer/Footer'
 import Background from '../../component/background/Background'
 import { HomeDrawerScreenProps } from '../../navigation/drawer/DrawerNavigation'
+import { RootState,  useAppDispatch } from '../../shared-state/redux/store'
+import { signOut} from '../../shared-state/redux/reducers'
+import { useSelector } from 'react-redux'
+import { DialogLogIn, DialogLogOut } from '../../component/dialog/Dialog'
 import { ButtonLogin } from '../../component/button/Button'
 
-const PureMap: React.FC<HomeDrawerScreenProps<'PureMap'>> = ({route, navigation}) => {
+const PureMap: React.FC<HomeDrawerScreenProps<'PureMap'>> = ({ route, navigation }) => {
 
+    const dispatch = useAppDispatch();
+    const [showPopupLogOut, setShowPopupLogOut] = useState(false);
+    const [showPopupLogIn, setShowPopupLogIn] = useState(false);
+
+    const isLogin: boolean = useSelector<RootState, boolean>(
+        (state) => state.user.isLogin
+    )
 
     const menu = () => {
         navigation.openDrawer();
     }
 
     const logOut = () => {
-        navigation.navigate('LogIn')
+        dispatch(signOut());
+        navigation.navigate('Home');
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+        });
     };
 
     const goHome = () => {
-        console.log(123)
+        navigation.navigate('Home')
     };
+
+    const goChart = () => {
+        if (isLogin) {
+            navigation.navigate('PureChart')
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'PureChart' }],
+            });
+        }
+        else {
+            setShowPopupLogIn(true);
+        }
+    }
+
+    const goCoin = () => {
+        if (isLogin) {
+            navigation.navigate('PureCoin')
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'PureCoin' }],
+            });
+        }
+        else{
+            setShowPopupLogIn(true);
+        }
+    }
+    
+    const goGift = () => {
+        navigation.navigate('PureGift')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'PureGift' }],
+        });
+    }
+    const goMap = () => {
+        navigation.navigate('PureMap')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'PureMap' }],
+        });
+    }
+    const goWorld = () => {
+        navigation.navigate('PureWorld')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'PureWorld' }],
+        });
+    }
 
     return (
         <Background
             type='home'
             centerFocus={goHome}
             leftFocus={menu}
-            rightFocus={logOut}
+            rightFocus={isLogin ? () => setShowPopupLogOut(true) : () => navigation.navigate('LogIn')}
         >
             <View style={styles.container}>
                 <View style={styles.boxBanner}>
@@ -37,17 +100,18 @@ const PureMap: React.FC<HomeDrawerScreenProps<'PureMap'>> = ({route, navigation}
 
                     <Text style={styles.txtBanner_1}>BẢN ĐỒ XANH</Text>
                     <Text style={styles.txtBanner_2}><Text style={{ fontWeight: '700' }}>Địa điểm</Text> đặt</Text>
-                    
                     <Image source={{ uri: IMAGE_PURE_MAP }} style={styles.imagePureMap} />
-                    <View style={styles.Button}>
-                            <ButtonLogin
-                                backgroundImage={BUTTON_BLUE}
-                                title='Khám phá ngay'
-                                titleStyle={styles.textBanner} />
-                        </View>
                 </View>
 
                 <LinearGradient colors={[Colors.WHITE, Colors.BG_CONTENT_1, Colors.BG_CONTENT_0]}>
+                <View style={styles.Button}>
+                            <ButtonLogin
+                                backgroundImage={BUTTON_BLUE}
+                                title='Khám phá ngay'
+                                titleStyle={styles.textBanner} 
+                                />
+                        
+                        </View>
                     <Image source={{ uri: IMAGE_BG_DOITAC }} style={styles.imageBgDoiTac} />
                     <Text style={styles.txtDoiTac}>ĐỐI TÁC</Text>
                     <View style={styles.boxThanks}>
@@ -63,15 +127,32 @@ const PureMap: React.FC<HomeDrawerScreenProps<'PureMap'>> = ({route, navigation}
                     <Text style={styles.txtBanner_3}>Địa điểm đặt “Trạm tái sinh” trên bản đồ</Text>
                     <Image source={{ uri: IMAGE_MAP }} style={styles.imageMap} />
                 </LinearGradient>
-
                 <Footer
-                onPress_PureChart={() => navigation.navigate('PureChart')}
-                onPress_PureCoin={() => navigation.navigate('PureCoin')}
-                onPress_PureGift={() => navigation.navigate('PureGift')}
-                onPress_PureMap={() => navigation.navigate('PureMap')}
-                onPress_PureWorld={() => navigation.navigate('PureWorld')}
+                    onPress_PureChart={goChart}
+                    onPress_PureCoin={goCoin}
+                    onPress_PureGift={goGift}
+                    onPress_PureMap={goMap}
+                    onPress_PureWorld={goWorld}
+                    onPressReport={() => navigation.navigate('ReportError')}
                 />
             </View>
+            <DialogLogOut
+                isVisible={showPopupLogOut}
+                onPressCancel={() => setShowPopupLogOut(false)}
+                onPressLogout={logOut}
+            />
+            <DialogLogIn
+                isVisible={showPopupLogIn}
+                onPressCancel={() => setShowPopupLogIn(false)}
+                onPressLogIn={() => {
+                    setShowPopupLogIn(false);
+                    navigation.navigate('LogIn');
+                    navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'Home' }],
+                    });
+                }}
+            />
         </Background>
 
     )
@@ -88,6 +169,21 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingTop: Dimensions.get('screen').height * 0.05,
         backgroundColor: Colors.BG_SCREEN,
+    },
+    Button: {
+
+        width: Dimensions.get('screen').width * 0.6,
+        height: Dimensions.get('screen').height * 0.07,
+        bottom: Dimensions.get('screen').height * 0.07,
+        marginLeft:'20%'
+
+
+    },
+    textBanner: {
+        fontSize: 14,
+        fontWeight: '500',
+        lineHeight: 16.8,
+        color: Colors.WHITE
     },
     imageThungChua: {
         resizeMode: 'contain',
@@ -114,20 +210,6 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
         width: Dimensions.get('screen').width,
         height: Dimensions.get('screen').height * 0.62
-    },
-    Button: {
-
-        width: Dimensions.get('screen').width * 0.6,
-        height: Dimensions.get('screen').height * 0.07,
-        bottom: Dimensions.get('screen').height * 0.07,
-
-
-    },
-    textBanner: {
-        fontSize: 14,
-        fontWeight: '500',
-        lineHeight: 16.8,
-        color: Colors.WHITE
     },
     imageBgDoiTac: {
         position: 'absolute',

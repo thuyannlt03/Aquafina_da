@@ -1,28 +1,122 @@
-import { Dimensions, StatusBar, StyleSheet, Text, View, ScrollView, Pressable, TouchableOpacity, Image, ImageBackground } from 'react-native'
-import React from 'react'
-import Header from '../../component/header/Header'
-import { Colors } from '../../resource/values/colors'
-import IonIcon from 'react-native-vector-icons/Ionicons'
+import { StyleSheet, Text, View, ScrollView, Image, Dimensions, ImageBackground, Modal, Pressable } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import Background from '../../component/background/Background'
+import { AOKHOAC, AOTHUN, BUTTON_BLUE, IMAGE_POPUP_HAPPY, IMAGE_RIPPLE_RING, IMAGE_RIPPLE_RULES, NON, TUI, TUIS, VE, VO } from '../../../assets'
+import { Colors } from '../../resource'
+import { Banners } from '../../../domain/entity/Banner'
+import { getBannsers } from '../../shared-state/redux/reducers/BannerReducer'
+import { useSelector } from 'react-redux'
+import { RootState,  useAppDispatch } from '../../shared-state/redux/store'
+import {  getUsers } from '../../shared-state/redux/reducers/UserReducer'
+import { signOut} from '../../shared-state/redux/reducers'
 import Footer from '../../component/footer/Footer'
-import { AOKHOAC, AOTHUN, BUTTON_BLUE, IMAGE_RIPPLE_RING, NON, TUI, TUIS, VE, VO } from '../../../../assets'
-import { ButtonLogin } from '../../component/button/Button'
 import { HomeDrawerScreenProps } from '../../navigation/drawer/DrawerNavigation'
+import { DialogLogIn, DialogLogOut } from '../../component/dialog/Dialog'
+import { ButtonLogin } from '../../component/button/Button'
+import { Users } from '../../../domain/entity/Users'
+
+const Rules: React.FC<HomeDrawerScreenProps<'Rules'>> = ({ route, navigation }) => {
+  const dispatch = useAppDispatch();
+
+    const isLogin: boolean = useSelector<RootState, boolean>(
+        (state) => state.user.isLogin
+    )
+
+    const [showPopupHappy, setShowPopupHappy] = useState(isLogin);
+    const [showPopupLogOut, setShowPopupLogOut] = useState(false);
+    const [showPopupLogIn, setShowPopupLogIn] = useState(false);
+
+    const listBanner: Banners[] = useSelector<RootState, Banners[]>(
+        (state) => state.banner.banners
+    );
+
+    const listUsers: Users[] = useSelector<RootState, Users[]>(
+        (state) => state.user.usersData
+    );
 
 
-const Rules : React.FC<HomeDrawerScreenProps<'Rule'>> = ({route, navigation}) => {
+    const user: Users = useSelector<RootState, Users>(
+        (state) => state.user.userData
+    )
+
+    useEffect(() => {
+        dispatch(getBannsers());
+
+        dispatch(getUsers(11));
+
+        if (isLogin) {
+            setShowPopupHappy(true);
+        }
+
+        return () => { }
+    }, [])
+
+    const menu = () => {
+        navigation.openDrawer();
+    }
+
+    const logOut = () => {
+        dispatch(signOut());
+        navigation.navigate('Home');
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+        });
+    };
 
 
-  const menu = () => {
-    navigation.openDrawer();
-}
+    const goChart = () => {
+        if (isLogin) {
+            navigation.navigate('PureChart')
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'PureChart' }],
+            });
+        }
+        else {
+            setShowPopupLogIn(true);
+        }
+    }
 
-const logOut = () => {
-    navigation.navigate('LogIn')
-};
+    const goCoin = () => {
+        if (isLogin) {
+            navigation.navigate('PureCoin')
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'PureCoin' }],
+            });
+        }
+        else{
+            setShowPopupLogIn(true);
+        }
+    }
+    
+    const goGift = () => {
+        navigation.navigate('PureGift')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'PureGift' }],
+        });
+    }
+    const goMap = () => {
+        navigation.navigate('PureMap')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'PureMap' }],
+        });
+    }
+    const goWorld = () => {
+        navigation.navigate('PureWorld')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'PureWorld' }],
+        });
+    }
 
-const PureGift  = () => {
-  navigation.navigate('PureGift')
-};
+
+  const PureGift = () => {
+    navigation.navigate('PureGift')
+  };
 
   const text2 = "Bước 1: Người chơi đến các địa điểm lắp đặt máy ";
   const boldAndUpperTexts2 = ["Bước 1"];
@@ -368,338 +462,374 @@ const PureGift  = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle={'light-content'} translucent />
-      <Header
-        leftIcon={
-          <IonIcon name="menu" size={25} color={Colors.BLUE_KV} />
-        }
-        leftFocus={menu}
-        rightIcon={
-          <IonIcon name="log-out-outline" size={25} color={Colors.BLUE_KV} />
-        }
-        rightFocus={logOut}
-      />
-      <View style={styles.boxBanner}>
-        <ScrollView>
+    <Background
+      type='home'
+      leftFocus={menu}
+      rightFocus={isLogin ? () => setShowPopupLogOut(true) : () => navigation.navigate('LogIn')}
+    >
+      <View style={styles.container}>
+
+        <View style={styles.boxBanner}>
+          <ScrollView>
 
 
-          <ImageBackground source={{ uri: IMAGE_RIPPLE_RING }} style={styles.imageBottleAquafina}>
-            <Text style={styles.textTitle}>THỂ LỆ CHƯƠNG TRÌNH</Text>
-            <Text style={styles.textTitle1}>TÁI SINH CHAI NHỰA - NHẬN QUÀ SỐNG XANH</Text>
-            <Text style={styles.des}>(Diễn ra từ ngày 17/07/2022 đến hết ngày 17/10/2022)</Text>
+            <ImageBackground source={{ uri: IMAGE_RIPPLE_RING }} style={styles.imageBottleAquafina}>
+              <Text style={styles.textTitle}>THỂ LỆ CHƯƠNG TRÌNH</Text>
+              <Text style={styles.textTitle1}>TÁI SINH CHAI NHỰA - NHẬN QUÀ SỐNG XANH</Text>
+              <Text style={styles.des}>(Diễn ra từ ngày 17/07/2022 đến hết ngày 17/10/2022)</Text>
 
-            <Text style={styles.textTitleb}>1. Đối tượng tham gia</Text>
-            <Text style={styles.des1}>Chương trình dành cho người chơi là công dân nước </Text>
-            <Text style={styles.des2}>Cộng hòa Xã hội chủ nghĩa Việt Nam, và trên 18 tuổi.</Text>
+              <Text style={styles.textTitleb}>1. Đối tượng tham gia</Text>
+              <Text style={styles.des1}>Chương trình dành cho người chơi là công dân nước </Text>
+              <Text style={styles.des2}>Cộng hòa Xã hội chủ nghĩa Việt Nam, và trên 18 tuổi.</Text>
 
-            <Text style={styles.textTitleb}>2. Nội dung và thể lệ chi tiết chương trình</Text>
-            <Text style={styles.textTitlec}>2.1 Cách thức tham gia chương trình:</Text>
-            <Text style={styles.des1}>Người chơi tham gia chương trình bằng cách thực</Text>
-            <Text style={styles.des2}>hiện theo các bước dưới đây:</Text>
+              <Text style={styles.textTitleb}>2. Nội dung và thể lệ chi tiết chương trình</Text>
+              <Text style={styles.textTitlec}>2.1 Cách thức tham gia chương trình:</Text>
+              <Text style={styles.des1}>Người chơi tham gia chương trình bằng cách thực</Text>
+              <Text style={styles.des2}>hiện theo các bước dưới đây:</Text>
 
-            <Text style={styles.text1}>{getTextWithBoldAndUpper2(text2, boldAndUpperTexts2)}</Text>
-            <Text style={styles.text}>thu gom vỏ chai nhựa đã qua sử dụng của</Text>
-            <Text style={styles.text2}>{getTextWithBoldAndUpper3(text3, boldAndUpperTexts3)}</Text>
-            <Text style={styles.text2}>{getTextWithBoldAndUpper4(text4, boldAndUpperTexts4)}</Text>
-            <Text style={styles.text2}>{getTextWithBoldAndUpper5(text5, boldAndUpperTexts5)}</Text>
-            <Text style={styles.text}>Tại mỗi Trạm Tái Sinh sẽ có lắp đặt một màn hình</Text>
-            <Text style={styles.text}>LCD (hoặc màn hình điện tử) ghi rõ thông tin</Text>
-            <Text style={styles.text}>hướng dẫn người tham gia thực hiện theo các </Text>
-            <Text style={styles.text}>bước tuần tự để hoàn thành một lượt tham gia.</Text>
-            <Text style={styles.text1}>{getTextWithBoldAndUpper6(text6, boldAndUpperTexts6)}</Text>
-            <Text style={styles.text}>màn hình LCD (hoặc màn hình điện tử, tùy từng</Text>
-            <Text style={styles.text}>Trạm Tái Sinh) để bắt đầu một lượt tham gia.</Text>
-            <Text style={styles.text1}>{getTextWithBoldAndUpper7(text7, boldAndUpperTexts7)}</Text>
-            <Text style={styles.text2}>{getTextWithBoldAndUpper8(text8, boldAndUpperTexts8)}</Text>
-            <Text style={styles.text}>Sinh và chờ hệ thống xử lý.</Text>
-            <Text style={styles.text1}>{getTextWithBoldAndUpper9(text9, boldAndUpperTexts9)}</Text>
-            <Text style={styles.text}>LCD/điện tử sẽ trả về một mã QR. Người chơi sử</Text>
-            <Text style={styles.text}>dụng điện thoại để quét mã QR trên màn hình để </Text>
-            <Text style={styles.text2}>{getTextWithBoldAndUpper10(text10, boldAndUpperTexts10)}</Text>
-            <Text style={styles.text4}>Nếu người chơi lần đầu tham gia, người chơi cần</Text>
-            <Text style={styles.text3}>thực hiện đăng ký tài khoản bằng cách nhập số </Text>
-            <Text style={styles.text3}>điện thoại theo hướng dẫn tại website. Hệ thống</Text>
-            <Text style={styles.text3}>sẽ gửi mã OTP để xác minh số điện thoại của</Text>
-            <Text style={styles.text3}>người chơi. Người chơi cần nhập mã OTP để </Text>
-            <Text style={styles.text3}>đăng nhập và nhận thông báo về tổng điểm</Text>
-            <Text style={styles.text3}>Aquafina mình đã tích lũy. </Text>
-
-
-          </ImageBackground>
-          <ImageBackground source={{ uri: IMAGE_RIPPLE_RING }} style={styles.imageBottleAquafina}>
-            <Text style={styles.text4}>Nếu người chơi đã đăng ký tài khoản, thì khi</Text>
-            <Text style={styles.text3}>{getTextWithBoldAndUpper11(text11, boldAndUpperTexts11)}</Text>
-            <Text style={styles.text3}>{getTextWithBoldAndUpper12(text12, boldAndUpperTexts12)}</Text>
-            <Text style={styles.text3}>điện thoại để hệ thống ghi nhận điểm Aquafina</Text>
-            <Text style={styles.text3}>của lượt tham gia mới. </Text>
-            <Text style={styles.text1}>Người chơi sẽ được tích lũy điểm Aquafina và</Text>
-            <Text style={styles.text}>điểm Aquafina sẽ được tổng kết mỗi tuần theo tỷ</Text>
-            <Text style={styles.text}>lệ quy đổi điểm như sau: </Text>
-            <Text style={styles.text4}>{getTextWithBoldAndUpper13(text13, boldAndUpperTexts13)}</Text>
-            <Text style={styles.text3}> Aquafina cho mỗi vỏ chai Aquafina.</Text>
-            <Text style={styles.text4}>{getTextWithBoldAndUpper14(text14, boldAndUpperTexts14)}</Text>
-            <Text style={styles.text3}>nhận 1 điểm Aquafina cho mỗi vỏ chai.</Text>
-            <Text style={styles.text1}>{getTextWithBoldAndUpper15(text15, boldAndUpperTexts15)}</Text>
-            <Text style={styles.text}>và điểm Aquafina mà người chơi tích lũy được,</Text>
-            <Text style={styles.text2}>{getTextWithBoldAndUpper16(text16, boldAndUpperTexts16)}</Text>
-            <Text style={styles.text}>có điểm Aquafina cao nhất (được hiển thị đầy đủ </Text>
-            <Text style={styles.text2}>{getTextWithBoldAndUpper17(text17, boldAndUpperTexts17)}</Text>
-            <Text style={styles.text2}>{getTextWithBoldAndUpper18(text18, boldAndUpperTexts18)}</Text>
-            <Text style={styles.text2}>{getTextWithBoldAndUpper19(text19, boldAndUpperTexts19)}</Text>
-            <Text style={styles.text}>12h00’ giờ ngày thứ 7 hàng tuần (hoặc một thời</Text>
-            <Text style={styles.text}>gian khác theo quyết định của Công ty TNHH</Text>
-            <Text style={styles.text}>Nước giải khát Suntory PepsiCo Việt Nam - SPVB)</Text>
-            <Text style={styles.text}>trong thời gian diễn ra chương trình.</Text>
-            <Text style={styles.text5}>*Lưu ý: Người chơi vẫn có thể tiếp tục chơi và</Text>
-            <Text style={styles.text6}>tích lũy điểm Aquafina ở các tuần tiếp theo để có</Text>
-            <Text style={styles.text6}>cơ hội nhận được các phần quà trong thời gian</Text>
-            <Text style={styles.text6}>diễn ra chương trình.  </Text>
-
-            <Text style={styles.textTitlec}>2.2 Những quy định về chương trình:</Text>
-            <Text style={styles.text1}>Số điểm Aquafina có được hàng tuần sẽ không</Text>
-            <Text style={styles.text2}>được cộng dồn trong suốt thời gian diễn ra</Text>
-            <Text style={styles.text2}>chương trình, mà sẽ được tổng kết điểm Aquafina</Text>
-            <Text style={styles.text2}>vào mỗi tuần.</Text>
-            <Text style={styles.text1}>Quà tặng chỉ được trao bằng hiện vật, không có</Text>
-            <Text style={styles.text2}>giá trị quy đổi thành tiền mặt.</Text>
-
-            <Text style={styles.text1}>Do số lượng quà tặng có giới hạn, SPVB có quyền </Text>
-            <Text style={styles.text2}>thay đổi quà tặng (về kích thước, màu sắc, sản</Text>
-            <Text style={styles.text2}>phẩm) nhưng đảm bảo sẽ giữ nguyên giá trị đã</Text>
-            <Text style={styles.text2}>cam kết.</Text>
-            <Text style={styles.text1}>Khi chương trình kết thúc, số điểm Aquafina</Text>
-            <Text style={styles.text2}>không được sử dụng sẽ không còn giá trị.</Text>
-            <Text style={styles.text1}>Chương trình có thể kết thúc sớm khi số lượng </Text>
-            <Text style={styles.text2}>quà tặng đã được quy đổi hết.</Text>
+              <Text style={styles.text1}>{getTextWithBoldAndUpper2(text2, boldAndUpperTexts2)}</Text>
+              <Text style={styles.text}>thu gom vỏ chai nhựa đã qua sử dụng của</Text>
+              <Text style={styles.text2}>{getTextWithBoldAndUpper3(text3, boldAndUpperTexts3)}</Text>
+              <Text style={styles.text2}>{getTextWithBoldAndUpper4(text4, boldAndUpperTexts4)}</Text>
+              <Text style={styles.text2}>{getTextWithBoldAndUpper5(text5, boldAndUpperTexts5)}</Text>
+              <Text style={styles.text}>Tại mỗi Trạm Tái Sinh sẽ có lắp đặt một màn hình</Text>
+              <Text style={styles.text}>LCD (hoặc màn hình điện tử) ghi rõ thông tin</Text>
+              <Text style={styles.text}>hướng dẫn người tham gia thực hiện theo các </Text>
+              <Text style={styles.text}>bước tuần tự để hoàn thành một lượt tham gia.</Text>
+              <Text style={styles.text1}>{getTextWithBoldAndUpper6(text6, boldAndUpperTexts6)}</Text>
+              <Text style={styles.text}>màn hình LCD (hoặc màn hình điện tử, tùy từng</Text>
+              <Text style={styles.text}>Trạm Tái Sinh) để bắt đầu một lượt tham gia.</Text>
+              <Text style={styles.text1}>{getTextWithBoldAndUpper7(text7, boldAndUpperTexts7)}</Text>
+              <Text style={styles.text2}>{getTextWithBoldAndUpper8(text8, boldAndUpperTexts8)}</Text>
+              <Text style={styles.text}>Sinh và chờ hệ thống xử lý.</Text>
+              <Text style={styles.text1}>{getTextWithBoldAndUpper9(text9, boldAndUpperTexts9)}</Text>
+              <Text style={styles.text}>LCD/điện tử sẽ trả về một mã QR. Người chơi sử</Text>
+              <Text style={styles.text}>dụng điện thoại để quét mã QR trên màn hình để </Text>
+              <Text style={styles.text2}>{getTextWithBoldAndUpper10(text10, boldAndUpperTexts10)}</Text>
+              <Text style={styles.text4}>Nếu người chơi lần đầu tham gia, người chơi cần</Text>
+              <Text style={styles.text3}>thực hiện đăng ký tài khoản bằng cách nhập số </Text>
+              <Text style={styles.text3}>điện thoại theo hướng dẫn tại website. Hệ thống</Text>
+              <Text style={styles.text3}>sẽ gửi mã OTP để xác minh số điện thoại của</Text>
+              <Text style={styles.text3}>người chơi. Người chơi cần nhập mã OTP để </Text>
+              <Text style={styles.text3}>đăng nhập và nhận thông báo về tổng điểm</Text>
+              <Text style={styles.text3}>Aquafina mình đã tích lũy. </Text>
 
 
-          </ImageBackground>
-          <ImageBackground source={{ uri: IMAGE_RIPPLE_RING }} style={styles.imageBottleAquafina1}>
+            </ImageBackground>
+            <ImageBackground source={{ uri: IMAGE_RIPPLE_RING }} style={styles.imageBottleAquafina}>
+              <Text style={styles.text4}>Nếu người chơi đã đăng ký tài khoản, thì khi</Text>
+              <Text style={styles.text3}>{getTextWithBoldAndUpper11(text11, boldAndUpperTexts11)}</Text>
+              <Text style={styles.text3}>{getTextWithBoldAndUpper12(text12, boldAndUpperTexts12)}</Text>
+              <Text style={styles.text3}>điện thoại để hệ thống ghi nhận điểm Aquafina</Text>
+              <Text style={styles.text3}>của lượt tham gia mới. </Text>
+              <Text style={styles.text1}>Người chơi sẽ được tích lũy điểm Aquafina và</Text>
+              <Text style={styles.text}>điểm Aquafina sẽ được tổng kết mỗi tuần theo tỷ</Text>
+              <Text style={styles.text}>lệ quy đổi điểm như sau: </Text>
+              <Text style={styles.text4}>{getTextWithBoldAndUpper13(text13, boldAndUpperTexts13)}</Text>
+              <Text style={styles.text3}> Aquafina cho mỗi vỏ chai Aquafina.</Text>
+              <Text style={styles.text4}>{getTextWithBoldAndUpper14(text14, boldAndUpperTexts14)}</Text>
+              <Text style={styles.text3}>nhận 1 điểm Aquafina cho mỗi vỏ chai.</Text>
+              <Text style={styles.text1}>{getTextWithBoldAndUpper15(text15, boldAndUpperTexts15)}</Text>
+              <Text style={styles.text}>và điểm Aquafina mà người chơi tích lũy được,</Text>
+              <Text style={styles.text2}>{getTextWithBoldAndUpper16(text16, boldAndUpperTexts16)}</Text>
+              <Text style={styles.text}>có điểm Aquafina cao nhất (được hiển thị đầy đủ </Text>
+              <Text style={styles.text2}>{getTextWithBoldAndUpper17(text17, boldAndUpperTexts17)}</Text>
+              <Text style={styles.text2}>{getTextWithBoldAndUpper18(text18, boldAndUpperTexts18)}</Text>
+              <Text style={styles.text2}>{getTextWithBoldAndUpper19(text19, boldAndUpperTexts19)}</Text>
+              <Text style={styles.text}>12h00’ giờ ngày thứ 7 hàng tuần (hoặc một thời</Text>
+              <Text style={styles.text}>gian khác theo quyết định của Công ty TNHH</Text>
+              <Text style={styles.text}>Nước giải khát Suntory PepsiCo Việt Nam - SPVB)</Text>
+              <Text style={styles.text}>trong thời gian diễn ra chương trình.</Text>
+              <Text style={styles.text5}>*Lưu ý: Người chơi vẫn có thể tiếp tục chơi và</Text>
+              <Text style={styles.text6}>tích lũy điểm Aquafina ở các tuần tiếp theo để có</Text>
+              <Text style={styles.text6}>cơ hội nhận được các phần quà trong thời gian</Text>
+              <Text style={styles.text6}>diễn ra chương trình.  </Text>
 
-            <Text style={styles.text1}>Người chơi chịu các khoản thuế, phí theo quy </Text>
-            <Text style={styles.text2}>định của pháp luật khi nhận quà tặng theo</Text>
-            <Text style={styles.text2}>chương trình này.</Text>
-            <Text style={styles.text1}>Người chơi chịu các khoản thuế, phí theo quy </Text>
-            <Text style={styles.text2}>định của pháp luật khi nhận quà tặng theo</Text>
-            <Text style={styles.text2}>chương trình này.</Text>
-            <Text style={styles.text1}>Số lượng quà tặng và điểm Aquafina cần thiết </Text>
-            <Text style={styles.text2}>để quy đổi được quy định chi tiết theo bảng dưới đây</Text>
-            <View style={styles.item}>
-              <View style={styles.card}>
-                <Image source={AOKHOAC} style={styles.image} />
-                <View style={styles.gr}>
-                  <Text style={styles.textcard}>Áo khoác cape</Text>
-                  <Text style={styles.textcard1}>Aquafina x Headless</Text>
-                  <Text style={styles.textcard2}>Số lượng quà tặng </Text>
-                  <Text style={styles.textcard2}>mỗi tuần: 6</Text>
-                  <Text style={styles.textcard2}>Cách thức đổi quà: </Text>
-                  <Text style={styles.textcard2}>Trao cho 6 người có điểm</Text>
-                  <Text style={styles.textcard2}> Aquaffina cao nhất</Text>
-                  <Text style={styles.textcard2}>Giá trị quà tặng (+VAT):</Text>
-                  <Text style={styles.textcard2}>1.200.000 đồng/ áo khoác </Text>
+              <Text style={styles.textTitlec}>2.2 Những quy định về chương trình:</Text>
+              <Text style={styles.text1}>Số điểm Aquafina có được hàng tuần sẽ không</Text>
+              <Text style={styles.text2}>được cộng dồn trong suốt thời gian diễn ra</Text>
+              <Text style={styles.text2}>chương trình, mà sẽ được tổng kết điểm Aquafina</Text>
+              <Text style={styles.text2}>vào mỗi tuần.</Text>
+              <Text style={styles.text1}>Quà tặng chỉ được trao bằng hiện vật, không có</Text>
+              <Text style={styles.text2}>giá trị quy đổi thành tiền mặt.</Text>
+
+              <Text style={styles.text1}>Do số lượng quà tặng có giới hạn, SPVB có quyền </Text>
+              <Text style={styles.text2}>thay đổi quà tặng (về kích thước, màu sắc, sản</Text>
+              <Text style={styles.text2}>phẩm) nhưng đảm bảo sẽ giữ nguyên giá trị đã</Text>
+              <Text style={styles.text2}>cam kết.</Text>
+              <Text style={styles.text1}>Khi chương trình kết thúc, số điểm Aquafina</Text>
+              <Text style={styles.text2}>không được sử dụng sẽ không còn giá trị.</Text>
+              <Text style={styles.text1}>Chương trình có thể kết thúc sớm khi số lượng </Text>
+              <Text style={styles.text2}>quà tặng đã được quy đổi hết.</Text>
+
+
+            </ImageBackground>
+            <ImageBackground source={{ uri: IMAGE_RIPPLE_RING }} style={styles.imageBottleAquafina1}>
+
+              <Text style={styles.text1}>Người chơi chịu các khoản thuế, phí theo quy </Text>
+              <Text style={styles.text2}>định của pháp luật khi nhận quà tặng theo</Text>
+              <Text style={styles.text2}>chương trình này.</Text>
+              <Text style={styles.text1}>Người chơi chịu các khoản thuế, phí theo quy </Text>
+              <Text style={styles.text2}>định của pháp luật khi nhận quà tặng theo</Text>
+              <Text style={styles.text2}>chương trình này.</Text>
+              <Text style={styles.text1}>Số lượng quà tặng và điểm Aquafina cần thiết </Text>
+              <Text style={styles.text2}>để quy đổi được quy định chi tiết theo bảng dưới đây</Text>
+              <View style={styles.item}>
+                <View style={styles.card}>
+                  <Image source={AOKHOAC} style={styles.image} />
+                  <View style={styles.gr}>
+                    <Text style={styles.textcard}>Áo khoác cape</Text>
+                    <Text style={styles.textcard1}>Aquafina x Headless</Text>
+                    <Text style={styles.textcard2}>Số lượng quà tặng </Text>
+                    <Text style={styles.textcard2}>mỗi tuần: 6</Text>
+                    <Text style={styles.textcard2}>Cách thức đổi quà: </Text>
+                    <Text style={styles.textcard2}>Trao cho 6 người có điểm</Text>
+                    <Text style={styles.textcard2}> Aquaffina cao nhất</Text>
+                    <Text style={styles.textcard2}>Giá trị quà tặng (+VAT):</Text>
+                    <Text style={styles.textcard2}>1.200.000 đồng/ áo khoác </Text>
+                  </View>
+                </View>
+                <View style={styles.card}>
+                  <Image source={TUI} style={styles.imaget} />
+                  <View style={styles.gr}>
+                    <Text style={styles.textcard3}>Túi Tote</Text>
+                    <Text style={styles.textcard4}>Aquafina x Headless</Text>
+                    <Text style={styles.textcard5}>Số lượng quà tặng </Text>
+                    <Text style={styles.textcard5}>mỗi tuần: 6</Text>
+                    <Text style={styles.textcard5}>Cách thức đổi quà: </Text>
+                    <Text style={styles.textcard5}>Trao cho 6 người có điểm</Text>
+                    <Text style={styles.textcard5}> Aquaffina cao nhất</Text>
+                    <Text style={styles.textcard5}>Giá trị quà tặng (+VAT):</Text>
+                    <Text style={styles.textcard5}>800.000 đồng/ túi </Text>
+                  </View>
+
                 </View>
               </View>
-              <View style={styles.card}>
-                <Image source={TUI} style={styles.imaget} />
-                <View style={styles.gr}>
-                  <Text style={styles.textcard3}>Túi Tote</Text>
-                  <Text style={styles.textcard4}>Aquafina x Headless</Text>
-                  <Text style={styles.textcard5}>Số lượng quà tặng </Text>
-                  <Text style={styles.textcard5}>mỗi tuần: 6</Text>
-                  <Text style={styles.textcard5}>Cách thức đổi quà: </Text>
-                  <Text style={styles.textcard5}>Trao cho 6 người có điểm</Text>
-                  <Text style={styles.textcard5}> Aquaffina cao nhất</Text>
-                  <Text style={styles.textcard5}>Giá trị quà tặng (+VAT):</Text>
-                  <Text style={styles.textcard5}>800.000 đồng/ túi </Text>
+            </ImageBackground>
+            <ImageBackground source={{ uri: IMAGE_RIPPLE_RING }} style={styles.imageBottleAquafina2}>
+
+
+              <View style={styles.item}>
+                <View style={styles.card}>
+                  <Image source={AOTHUN} style={styles.image} />
+                  <View style={styles.gr}>
+                    <Text style={styles.textcard}>Áo thun</Text>
+                    <Text style={styles.textcard1}>Aquafina x Headless</Text>
+                    <Text style={styles.textcard2}>Số lượng quà tặng </Text>
+                    <Text style={styles.textcard2}>mỗi tuần: 100</Text>
+                    <Text style={styles.textcard2}>Cách thức đổi quà: </Text>
+                    <Text style={styles.textcard2}>Trao ngẫu nhiên cho 100 người</Text>
+                    <Text style={styles.textcard2}>trong tổng số 388 người có</Text>
+                    <Text style={styles.textcard2}>điểm Aquafina cao nhất còn lại</Text>
+                    <Text style={styles.textcard2}>Giá trị quà tặng (+VAT):</Text>
+                    <Text style={styles.textcard2}>200.000 đồng/ áo </Text>
+                  </View>
                 </View>
+                <View style={styles.card}>
+                  <Image source={NON} style={styles.imagen} />
+                  <View style={styles.gr}>
+                    <Text style={styles.textcard6}>Nón Aquafina x Headless</Text>
+                    <Text style={styles.textcard7}>Số lượng quà tặng </Text>
+                    <Text style={styles.textcard7}>mỗi tuần: 88</Text>
+                    <Text style={styles.textcard7}>Cách thức đổi quà: </Text>
+                    <Text style={styles.textcard7}>Trao ngẫu nhiên cho 88 người</Text>
+                    <Text style={styles.textcard7}>trong tổng số 200 người có</Text>
+                    <Text style={styles.textcard7}>điểm Aquafina cao nhất còn lại</Text>
+                    <Text style={styles.textcard7}>Giá trị quà tặng (+VAT):</Text>
+                    <Text style={styles.textcard7}>200.000 đồng/ nón </Text>
+                  </View>
 
-              </View>
-            </View>
-          </ImageBackground>
-          <ImageBackground source={{ uri: IMAGE_RIPPLE_RING }} style={styles.imageBottleAquafina2}>
-
-
-            <View style={styles.item}>
-              <View style={styles.card}>
-                <Image source={AOTHUN} style={styles.image} />
-                <View style={styles.gr}>
-                  <Text style={styles.textcard}>Áo thun</Text>
-                  <Text style={styles.textcard1}>Aquafina x Headless</Text>
-                  <Text style={styles.textcard2}>Số lượng quà tặng </Text>
-                  <Text style={styles.textcard2}>mỗi tuần: 100</Text>
-                  <Text style={styles.textcard2}>Cách thức đổi quà: </Text>
-                  <Text style={styles.textcard2}>Trao ngẫu nhiên cho 100 người</Text>
-                  <Text style={styles.textcard2}>trong tổng số 388 người có</Text>
-                  <Text style={styles.textcard2}>điểm Aquafina cao nhất còn lại</Text>
-                  <Text style={styles.textcard2}>Giá trị quà tặng (+VAT):</Text>
-                  <Text style={styles.textcard2}>200.000 đồng/ áo </Text>
-                </View>
-              </View>
-              <View style={styles.card}>
-                <Image source={NON} style={styles.imagen} />
-                <View style={styles.gr}>
-                  <Text style={styles.textcard6}>Nón Aquafina x Headless</Text>
-                  <Text style={styles.textcard7}>Số lượng quà tặng </Text>
-                  <Text style={styles.textcard7}>mỗi tuần: 88</Text>
-                  <Text style={styles.textcard7}>Cách thức đổi quà: </Text>
-                  <Text style={styles.textcard7}>Trao ngẫu nhiên cho 88 người</Text>
-                  <Text style={styles.textcard7}>trong tổng số 200 người có</Text>
-                  <Text style={styles.textcard7}>điểm Aquafina cao nhất còn lại</Text>
-                  <Text style={styles.textcard7}>Giá trị quà tặng (+VAT):</Text>
-                  <Text style={styles.textcard7}>200.000 đồng/ nón </Text>
-                </View>
-
-              </View>
-            </View>
-            <View style={styles.item}>
-              <View style={styles.card}>
-                <Image source={VO} style={styles.image} />
-                <View style={styles.gr}>
-                  <Text style={styles.textcard}>Vớ Aquafina x Repeet</Text>
-                  <Text style={styles.textcard2}>Số lượng quà tặng </Text>
-                  <Text style={styles.textcard2}>mỗi tuần: 100</Text>
-                  <Text style={styles.textcard2}>Cách thức đổi quà: </Text>
-                  <Text style={styles.textcard2}>Trao ngẫu nhiên cho 100 người</Text>
-                  <Text style={styles.textcard2}>trong tổng số 200 người có</Text>
-                  <Text style={styles.textcard2}>điểm Aquafina cao nhất còn lại</Text>
-                  <Text style={styles.textcard2}>Giá trị quà tặng (+VAT):</Text>
-                  <Text style={styles.textcard2}>50.000 đồng/ vớ </Text>
                 </View>
               </View>
-              <View style={styles.card}>
-                <Image source={TUIS} style={styles.imaget} />
-                <View style={styles.gr}>
-                  <Text style={styles.textcard}>Túi Tote</Text>
-                  <Text style={styles.textcard1}>Aquafina x Headless</Text>
-                  <Text style={styles.textcard2}>Số lượng quà tặng </Text>
-                  <Text style={styles.textcard2}>mỗi tuần: 80</Text>
-                  <Text style={styles.textcard2}>Cách thức đổi quà: </Text>
-                  <Text style={styles.textcard2}>Trao ngẫu nhiên cho 100 người</Text>
-                  <Text style={styles.textcard2}>trong tổng số 100 người có</Text>
-                  <Text style={styles.textcard2}>điểm Aquafina cao nhất còn lại</Text>
-                  <Text style={styles.textcard2}>Giá trị quà tặng (+VAT):</Text>
-                  <Text style={styles.textcard2}>200.000 đồng/ túi </Text>
+              <View style={styles.item}>
+                <View style={styles.card}>
+                  <Image source={VO} style={styles.image} />
+                  <View style={styles.gr}>
+                    <Text style={styles.textcard}>Vớ Aquafina x Repeet</Text>
+                    <Text style={styles.textcard2}>Số lượng quà tặng </Text>
+                    <Text style={styles.textcard2}>mỗi tuần: 100</Text>
+                    <Text style={styles.textcard2}>Cách thức đổi quà: </Text>
+                    <Text style={styles.textcard2}>Trao ngẫu nhiên cho 100 người</Text>
+                    <Text style={styles.textcard2}>trong tổng số 200 người có</Text>
+                    <Text style={styles.textcard2}>điểm Aquafina cao nhất còn lại</Text>
+                    <Text style={styles.textcard2}>Giá trị quà tặng (+VAT):</Text>
+                    <Text style={styles.textcard2}>50.000 đồng/ vớ </Text>
+                  </View>
                 </View>
+                <View style={styles.card}>
+                  <Image source={TUIS} style={styles.imaget} />
+                  <View style={styles.gr}>
+                    <Text style={styles.textcard}>Túi Tote</Text>
+                    <Text style={styles.textcard1}>Aquafina x Headless</Text>
+                    <Text style={styles.textcard2}>Số lượng quà tặng </Text>
+                    <Text style={styles.textcard2}>mỗi tuần: 80</Text>
+                    <Text style={styles.textcard2}>Cách thức đổi quà: </Text>
+                    <Text style={styles.textcard2}>Trao ngẫu nhiên cho 100 người</Text>
+                    <Text style={styles.textcard2}>trong tổng số 100 người có</Text>
+                    <Text style={styles.textcard2}>điểm Aquafina cao nhất còn lại</Text>
+                    <Text style={styles.textcard2}>Giá trị quà tặng (+VAT):</Text>
+                    <Text style={styles.textcard2}>200.000 đồng/ túi </Text>
+                  </View>
 
-              </View>
-            </View>
-
-          </ImageBackground>
-          <ImageBackground source={{ uri: IMAGE_RIPPLE_RING }} style={styles.imageBottleAquafina3}>
-            <View style={styles.item}>
-              <View style={styles.card}>
-                <Image source={VE} style={styles.imagea} />
-                <View style={styles.gr}>
-                  <Text style={styles.textcard}>Voucher xem phim tại</Text>
-                  <Text style={styles.textcard1}>rạp chiếu phim Lotte</Text>
-                  <Text style={styles.textcard2}>Số lượng quà tặng </Text>
-                  <Text style={styles.textcard2}>mỗi tuần: 100</Text>
-                  <Text style={styles.textcard2}>Cách thức đổi quà: </Text>
-                  <Text style={styles.textcard2}>Trao ngẫu nhiên cho 100 người</Text>
-                  <Text style={styles.textcard2}>trong tổng số 200 người có</Text>
-                  <Text style={styles.textcard2}>điểm Aquafina cao nhất còn lại</Text>
-                  <Text style={styles.textcard2}>Giá trị quà tặng (+VAT):</Text>
-                  <Text style={styles.textcard2}>50.000 đồng/ đôi vớ</Text>
                 </View>
               </View>
 
-            </View>
-            <Text style={styles.text4}>Mỗi tuần SPVB sẽ công bố danh sách 400 người</Text>
-            <Text style={styles.text3}>chơi có điểm Aquafina cao nhất và quà tặng trên</Text>
-            <Text style={styles.text3}>{getTextWithBoldAndUpper20(text20, boldAndUpperTexts20)}</Text>
-            <Text style={styles.text3}>{getTextWithBoldAndUpper21(text21, boldAndUpperTexts21)}</Text>
-            <Text style={styles.text9}>thứ 7 hàng tuần trong thời gian diễn ra chương trình,</Text>
-            <Text style={styles.text3}>người chơi cần cung cấp thông tin cá nhân cho</Text>
-            <Text style={styles.text3}>SPVB theo hướng dẫn trong vòng 7 ngày kể từ</Text>
-            <Text style={styles.text3}>ngày đổi quà để được hướng dẫn nhận quà tặng.</Text>
-            <Text style={styles.text3}>Việc người chơi cung cấp thông tin cá nhân cho</Text>
-            <Text style={styles.text3}>SPVB theo mục đích này được hiểu là hành động</Text>
-            <Text style={styles.text3}>cho phép SPVB thu thập và sử dụng thông tin</Text>
-            <Text style={styles.text3}>cá nhân của người chơi theo mục địch đã nêu. </Text>
-            <Text style={styles.text3}>Trong mọi trường hợp, việc người chơi gửi thông</Text>
-            <Text style={styles.text3}>tin nhận quà sau thời gian quy định là không hợp</Text>
-            <Text style={styles.text3}>lệ, và được xem là người chơi từ bỏ việc nhận quà.</Text>
+            </ImageBackground>
+            <ImageBackground source={{ uri: IMAGE_RIPPLE_RING }} style={styles.imageBottleAquafina3}>
+              <View style={styles.item}>
+                <View style={styles.card}>
+                  <Image source={VE} style={styles.imagea} />
+                  <View style={styles.gr}>
+                    <Text style={styles.textcard}>Voucher xem phim tại</Text>
+                    <Text style={styles.textcard1}>rạp chiếu phim Lotte</Text>
+                    <Text style={styles.textcard2}>Số lượng quà tặng </Text>
+                    <Text style={styles.textcard2}>mỗi tuần: 100</Text>
+                    <Text style={styles.textcard2}>Cách thức đổi quà: </Text>
+                    <Text style={styles.textcard2}>Trao ngẫu nhiên cho 100 người</Text>
+                    <Text style={styles.textcard2}>trong tổng số 200 người có</Text>
+                    <Text style={styles.textcard2}>điểm Aquafina cao nhất còn lại</Text>
+                    <Text style={styles.textcard2}>Giá trị quà tặng (+VAT):</Text>
+                    <Text style={styles.textcard2}>50.000 đồng/ đôi vớ</Text>
+                  </View>
+                </View>
 
-            <Text style={styles.text4}>Quà tặng sẽ được vận chuyển đến địa chỉ mà </Text>
-            <Text style={styles.text3}>người chơi đã cung cấp khi Bên thứ 3 – phụ trách</Text>
-            <Text style={styles.text3}>việc vận chuyển quà cho SPVB  trong vòng 30</Text>
-            <Text style={styles.text3}>ngày kể từ ngày kết thúc chương trình. Trong</Text>
-            <Text style={styles.text3}>trường hợp bất khả kháng như thiên tai, dịch</Text>
-            <Text style={styles.text3}>bệnh, việc vận chuyển có thể bị ảnh hưởng và</Text>
-            <Text style={styles.text3}>thời gian trao quà sẽ kéo dài hơn so với thời hạn</Text>
-            <Text style={styles.text3}>đã cam kết nêu trên. SPVB sẽ không chịu trách </Text>
-            <Text style={styles.text3}>nhiệm nếu thông tin nhận quà mà người chơi</Text>
-            <Text style={styles.text3}>cung cấp không chính xác. Người chơi có trách</Text>
-            <Text style={styles.text3}>nhiệm ký tên trên phiếu giao hàng, biên bản bàn</Text>
-            <Text style={styles.text3}>giao quà tặng, vận đơn bưu điện hoặc một tài liệu</Text>
-            <Text style={styles.text3}>có tên gọi khác nhằm xác định đã nhận quà từ</Text>
-            <Text style={styles.text3}>chương trình</Text>
+              </View>
+              <Text style={styles.text4}>Mỗi tuần SPVB sẽ công bố danh sách 400 người</Text>
+              <Text style={styles.text3}>chơi có điểm Aquafina cao nhất và quà tặng trên</Text>
+              <Text style={styles.text3}>{getTextWithBoldAndUpper20(text20, boldAndUpperTexts20)}</Text>
+              <Text style={styles.text3}>{getTextWithBoldAndUpper21(text21, boldAndUpperTexts21)}</Text>
+              <Text style={styles.text9}>thứ 7 hàng tuần trong thời gian diễn ra chương trình,</Text>
+              <Text style={styles.text3}>người chơi cần cung cấp thông tin cá nhân cho</Text>
+              <Text style={styles.text3}>SPVB theo hướng dẫn trong vòng 7 ngày kể từ</Text>
+              <Text style={styles.text3}>ngày đổi quà để được hướng dẫn nhận quà tặng.</Text>
+              <Text style={styles.text3}>Việc người chơi cung cấp thông tin cá nhân cho</Text>
+              <Text style={styles.text3}>SPVB theo mục đích này được hiểu là hành động</Text>
+              <Text style={styles.text3}>cho phép SPVB thu thập và sử dụng thông tin</Text>
+              <Text style={styles.text3}>cá nhân của người chơi theo mục địch đã nêu. </Text>
+              <Text style={styles.text3}>Trong mọi trường hợp, việc người chơi gửi thông</Text>
+              <Text style={styles.text3}>tin nhận quà sau thời gian quy định là không hợp</Text>
+              <Text style={styles.text3}>lệ, và được xem là người chơi từ bỏ việc nhận quà.</Text>
 
-            <Text style={styles.text4}>Mỗi cá nhân có quyền thắng nhiều hơn 1 giải  </Text>
-            <Text style={styles.text3}> trong thời gian diễn ra chương trình với điều kiện</Text>
-            <Text style={styles.text3}> không thắng giải trong cùng 1 thời điểm.</Text>
-          </ImageBackground>
-          <ImageBackground source={{ uri: IMAGE_RIPPLE_RING }} style={styles.imageBottleAquafina4}>
-            <Text style={styles.textTitleb}>3. Quy định chung</Text>
+              <Text style={styles.text4}>Quà tặng sẽ được vận chuyển đến địa chỉ mà </Text>
+              <Text style={styles.text3}>người chơi đã cung cấp khi Bên thứ 3 – phụ trách</Text>
+              <Text style={styles.text3}>việc vận chuyển quà cho SPVB  trong vòng 30</Text>
+              <Text style={styles.text3}>ngày kể từ ngày kết thúc chương trình. Trong</Text>
+              <Text style={styles.text3}>trường hợp bất khả kháng như thiên tai, dịch</Text>
+              <Text style={styles.text3}>bệnh, việc vận chuyển có thể bị ảnh hưởng và</Text>
+              <Text style={styles.text3}>thời gian trao quà sẽ kéo dài hơn so với thời hạn</Text>
+              <Text style={styles.text3}>đã cam kết nêu trên. SPVB sẽ không chịu trách </Text>
+              <Text style={styles.text3}>nhiệm nếu thông tin nhận quà mà người chơi</Text>
+              <Text style={styles.text3}>cung cấp không chính xác. Người chơi có trách</Text>
+              <Text style={styles.text3}>nhiệm ký tên trên phiếu giao hàng, biên bản bàn</Text>
+              <Text style={styles.text3}>giao quà tặng, vận đơn bưu điện hoặc một tài liệu</Text>
+              <Text style={styles.text3}>có tên gọi khác nhằm xác định đã nhận quà từ</Text>
+              <Text style={styles.text3}>chương trình</Text>
 
-            <Text style={styles.text1}>SPVB có quyền cập nhật và thay đổi thể lệ </Text>
-            <Text style={styles.text}>chương trình này để phù hợp hơn với người chơi  </Text>
-            <Text style={styles.text}>và thông báo công khai đến người chơi. Trong</Text>
-            <Text style={styles.text}>trường hợp có sự thay đổi về thể lệ cũng như thời </Text>
-            <Text style={styles.text}>gian tổ chức, SPVB sẽ thông báo trên trang </Text>
-            <Text style={styles.text}>fanpage của chương trình tại</Text>
-            <Text style={styles.text}>{getTextWithBoldAndUpper22(text22, boldAndUpperTexts22)}</Text>
-            <Text style={styles.text}>Mọi thắc mắc liên quan đến chương trình, người  </Text>
-            <Text style={styles.text}>chơi có thể nhắn tin vào hộp thư trang fan page</Text>
-            <Text style={styles.text}>{getTextWithBoldAndUpper23(text23, boldAndUpperTexts23)}</Text>
-            <Text style={styles.text}>{getTextWithBoldAndUpper24(text24, boldAndUpperTexts24)}</Text>
-            <Text style={styles.text}>19001220. SPVB chỉ chịu trách nhiệm giải quyết</Text>
-            <Text style={styles.text}>những khiếu nại, tranh chấp được gửi đến SPVB</Text>
-            <Text style={styles.text}>trong thời hạn từ lúc bắt đầu chương trình cho</Text>
-            <Text style={styles.text}>đến khi hoàn tất việc trao quà tặng cho người</Text>
-            <Text style={styles.text}>chơi quy đổi quà tặng hợp lệ theo quy định tại</Text>
-            <Text style={styles.text}>Điều 2.4 nêu trên. Trong mọi trường hợp, nếu có</Text>
-            <Text style={styles.text}>tranh chấp về việc thực chương trình (bao gồm</Text>
-            <Text style={styles.text}>nhưng không giới hạn việc xác định người chơi </Text>
-            <Text style={styles.text}>chiến thắng theo bảng xếp hạng tuần, quy đổi</Text>
-            <Text style={styles.text}>quà tặng hợp lệ), thì quyền quyết định cuối cùng</Text>
-            <Text style={styles.text}>sẽ thuộc về SPVB.</Text>
-            <Text style={styles.text}>SPVB cam kết thực hiện đúng và hoàn toàn chịu</Text>
-            <Text style={styles.text}>trách nhiệm về chương trình trên theo các qui</Text>
-            <Text style={styles.text}>định của pháp luật hiện hành. </Text>
+              <Text style={styles.text4}>Mỗi cá nhân có quyền thắng nhiều hơn 1 giải  </Text>
+              <Text style={styles.text3}> trong thời gian diễn ra chương trình với điều kiện</Text>
+              <Text style={styles.text3}> không thắng giải trong cùng 1 thời điểm.</Text>
+            </ImageBackground>
+            <ImageBackground source={{ uri: IMAGE_RIPPLE_RING }} style={styles.imageBottleAquafina4}>
+              <Text style={styles.textTitleb}>3. Quy định chung</Text>
 
-            <Text style={styles.text}>Phù hợp với qui định của pháp luật, SPVB có</Text>
-            <Text style={styles.text}>quyền chấm dứt hoặc huỷ chương trình này trong</Text>
-            <Text style={styles.text}>trường hợp bất khả kháng và sẽ thông báo công</Text>
-            <Text style={styles.text}>khai phù hợp với quy định pháp luật. </Text>
-            <Text style={styles.text}>Nếu phát hiện có dấu hiệu gian lận, sử dụng công</Text>
-            <Text style={styles.text}>cụ, phần mềm hỗ trợ, tài khoản của người chơi sẽ</Text>
-            <Text style={styles.text}>bị khóa đến hết thời gian diễn ra chương trình,</Text>
-            <Text style={styles.text}>mọi quà tặng sẽ bị thu hồi. </Text>
-            <Text style={styles.text}>Bằng việc sử dụng Các Dịch Vụ, đăng ký một tài</Text>
-            <Text style={styles.text}>khoản với chúng tôi hoặc truy cập Nền tảng,</Text>
-            <Text style={styles.text}>người chơi xác nhận và đồng ý rằng người chơi</Text>
-            <Text style={styles.text}>chấp nhận các phương pháp, yêu cầu, và/hoặc</Text>
-            <Text style={styles.text}>chính sách được mô tả trong Chính sách bảo mật</Text>
-            <Text style={styles.text}>này, và theo đây bạn đồng ý cho phép chúng tôi</Text>
-            <Text style={styles.text}>thu thập, sử dụng, tiết lộ và/hoặc xử lý dữ liệu cá</Text>
-            <Text style={styles.text}>nhân của bạn cho mục đích thương mại.</Text>
+              <Text style={styles.text1}>SPVB có quyền cập nhật và thay đổi thể lệ </Text>
+              <Text style={styles.text}>chương trình này để phù hợp hơn với người chơi  </Text>
+              <Text style={styles.text}>và thông báo công khai đến người chơi. Trong</Text>
+              <Text style={styles.text}>trường hợp có sự thay đổi về thể lệ cũng như thời </Text>
+              <Text style={styles.text}>gian tổ chức, SPVB sẽ thông báo trên trang </Text>
+              <Text style={styles.text}>fanpage của chương trình tại</Text>
+              <Text style={styles.text}>{getTextWithBoldAndUpper22(text22, boldAndUpperTexts22)}</Text>
+              <Text style={styles.text}>Mọi thắc mắc liên quan đến chương trình, người  </Text>
+              <Text style={styles.text}>chơi có thể nhắn tin vào hộp thư trang fan page</Text>
+              <Text style={styles.text}>{getTextWithBoldAndUpper23(text23, boldAndUpperTexts23)}</Text>
+              <Text style={styles.text}>{getTextWithBoldAndUpper24(text24, boldAndUpperTexts24)}</Text>
+              <Text style={styles.text}>19001220. SPVB chỉ chịu trách nhiệm giải quyết</Text>
+              <Text style={styles.text}>những khiếu nại, tranh chấp được gửi đến SPVB</Text>
+              <Text style={styles.text}>trong thời hạn từ lúc bắt đầu chương trình cho</Text>
+              <Text style={styles.text}>đến khi hoàn tất việc trao quà tặng cho người</Text>
+              <Text style={styles.text}>chơi quy đổi quà tặng hợp lệ theo quy định tại</Text>
+              <Text style={styles.text}>Điều 2.4 nêu trên. Trong mọi trường hợp, nếu có</Text>
+              <Text style={styles.text}>tranh chấp về việc thực chương trình (bao gồm</Text>
+              <Text style={styles.text}>nhưng không giới hạn việc xác định người chơi </Text>
+              <Text style={styles.text}>chiến thắng theo bảng xếp hạng tuần, quy đổi</Text>
+              <Text style={styles.text}>quà tặng hợp lệ), thì quyền quyết định cuối cùng</Text>
+              <Text style={styles.text}>sẽ thuộc về SPVB.</Text>
+              <Text style={styles.text}>SPVB cam kết thực hiện đúng và hoàn toàn chịu</Text>
+              <Text style={styles.text}>trách nhiệm về chương trình trên theo các qui</Text>
+              <Text style={styles.text}>định của pháp luật hiện hành. </Text>
 
-            <View style={styles.Button}>
-              <ButtonLogin
-                backgroundImage={BUTTON_BLUE}
-                titleStyle={styles.titleLogin}
-                title='Đã hiểu'
-                onPress={PureGift}
-              />
-            </View>
-          
-          </ImageBackground>
-          <Footer/>
-        </ScrollView>
+              <Text style={styles.text}>Phù hợp với qui định của pháp luật, SPVB có</Text>
+              <Text style={styles.text}>quyền chấm dứt hoặc huỷ chương trình này trong</Text>
+              <Text style={styles.text}>trường hợp bất khả kháng và sẽ thông báo công</Text>
+              <Text style={styles.text}>khai phù hợp với quy định pháp luật. </Text>
+              <Text style={styles.text}>Nếu phát hiện có dấu hiệu gian lận, sử dụng công</Text>
+              <Text style={styles.text}>cụ, phần mềm hỗ trợ, tài khoản của người chơi sẽ</Text>
+              <Text style={styles.text}>bị khóa đến hết thời gian diễn ra chương trình,</Text>
+              <Text style={styles.text}>mọi quà tặng sẽ bị thu hồi. </Text>
+              <Text style={styles.text}>Bằng việc sử dụng Các Dịch Vụ, đăng ký một tài</Text>
+              <Text style={styles.text}>khoản với chúng tôi hoặc truy cập Nền tảng,</Text>
+              <Text style={styles.text}>người chơi xác nhận và đồng ý rằng người chơi</Text>
+              <Text style={styles.text}>chấp nhận các phương pháp, yêu cầu, và/hoặc</Text>
+              <Text style={styles.text}>chính sách được mô tả trong Chính sách bảo mật</Text>
+              <Text style={styles.text}>này, và theo đây bạn đồng ý cho phép chúng tôi</Text>
+              <Text style={styles.text}>thu thập, sử dụng, tiết lộ và/hoặc xử lý dữ liệu cá</Text>
+              <Text style={styles.text}>nhân của bạn cho mục đích thương mại.</Text>
+
+              <View style={styles.Button}>
+                <ButtonLogin
+                  backgroundImage={BUTTON_BLUE}
+                  titleStyle={styles.titleLogin}
+                  title='Đã hiểu'
+                  onPress={PureGift}
+                />
+              </View>
+
+            </ImageBackground>
+
+          </ScrollView>
+          <Footer
+            onPress_PureChart={goChart}
+            onPress_PureCoin={goCoin}
+            onPress_PureGift={goGift}
+            onPress_PureMap={goMap}
+            onPress_PureWorld={goWorld}
+            onPressReport={() => navigation.navigate('ReportError')}
+          />
+        </View>
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={false}>
+          <View style={styles.boxNotifi}>
+            <Pressable onPress={() => setShowPopupHappy(false)}>
+              <Image source={{ uri: IMAGE_POPUP_HAPPY }} style={styles.imagePopupHappy} />
+            </Pressable>
+          </View>
+        </Modal>
+
+        <DialogLogOut
+          isVisible={showPopupLogOut}
+          onPressCancel={() => setShowPopupLogOut(false)}
+          onPressLogout={logOut}
+        />
+
+        <DialogLogIn
+          isVisible={showPopupLogIn}
+          onPressCancel={() => setShowPopupLogIn(false)}
+          onPressLogIn={() => {
+            setShowPopupLogIn(false);
+            navigation.navigate('LogIn');
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'Home' }],
+            });
+          }}
+        />
       </View>
-    </View>
+
+    </Background>
+   
   )
 }
 
@@ -708,15 +838,26 @@ const PureGift  = () => {
 export default Rules
 
 const styles = StyleSheet.create({
-  Button:{
-    width: Dimensions.get('screen').width*0.5,
+  Button: {
+    width: Dimensions.get('screen').width * 0.5,
     height: Dimensions.get('screen').height * 0.07,
-    marginTop:  Dimensions.get('screen').height * 0.03,
+    marginTop: Dimensions.get('screen').height * 0.03,
     marginLeft: Dimensions.get('screen').width * 0.05,
-    
-},
+
+  },
   titleLogin: {
     color: Colors.WHITE,
+  },
+  boxNotifi: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  imagePopupHappy: {
+    resizeMode: 'contain',
+    width: Dimensions.get('screen').width * 0.8,
+    height: Dimensions.get('screen').height * 0.5
   },
   imagen: {
     width: Dimensions.get('screen').width * 0.4,

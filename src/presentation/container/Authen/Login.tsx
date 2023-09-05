@@ -1,40 +1,92 @@
-import { StatusBar, Dimensions, ScrollView, Image, StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import { Alert, Dimensions, Image, StyleSheet, Text, View } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import Header from '../../component/header/Header'
 import FoundationIcon from 'react-native-vector-icons/Foundation'
 import { Colors } from '../../resource/values/colors'
 import { BUTTON_BLUE, BUTTON_WHITE, IMAGE_FOOTER_AUTHEN, IMAGE_TEXT_WELLCOME } from '../../../../assets'
-import {ButtonLogin, ButtonRegister} from '../../component/button/Button'
 import { TextField } from '../../component/textfield/TextField'
-import { AuthenStackScreenProps } from '../../navigation/stack/AuthenNavigation'
+import { HomeDrawerScreenProps } from '../../navigation/drawer/DrawerNavigation'
+import { Users } from '../../../domain/entity/Users'
+import { rtdb } from "../../../core/api/RealTimeDatabase";
+import Background from '../../component/background/Background'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../shared-state'
+import { ButtonLogin, ButtonRegister } from '../../component/button/Button'
 
-const Login: React.FC<AuthenStackScreenProps<'LogIn'>> = ({ navigation, route }) => {
+const Login: React.FC<HomeDrawerScreenProps<'LogIn'>> = ({ route, navigation }) => {
 
     const [phone, setPhone] = useState('');
+    const isLogin: boolean = useSelector<RootState, boolean>(
+        (state) => state.user.isLogin
+    )
 
     const goHome = () => {
-
+        navigation.navigate('Home')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+        });
     };
 
-    const logIn = () => {
-        navigation.navigate('LoginOTP', {
-            phone: phone,
-        });
+    useEffect(() => {
+        console.log(isLogin)
+        return () => { }
+    }, [])
+
+
+    const logIn = async () => {
+        if (phone.length != 10) {
+            Alert.alert('Số điện thoại không hợp lệ')
+        }
+        else {
+            let list: Users[] = [];
+            try {
+                const user = await rtdb.ref('Users')
+                    .orderByChild('phone')
+                    .equalTo(phone)
+                    .limitToFirst(1)
+                    .once('value', (value: any) => {
+                        value.forEach((item: any) => {
+                            if (item != undefined || item != null) {
+                                list.push(item);
+                                navigation.navigate('SendOTP', {
+                                    phone: phone,
+                                    type: 'login'
+                                });
+                                setPhone('');
+                            }
+                        })
+                    }).then(() => {
+                        if (list.length == 0) {
+                            Alert.alert("Tài khoản không tồn tại");
+                        }
+                    });
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
     };
 
     const register = () => {
         navigation.navigate('Register');
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'Register' }],
+        });
     };
 
     return (
-        <ScrollView>
-            <StatusBar barStyle={'light-content'} translucent/>
+        <Background
+            type='authen'
+        >
             <View style={styles.container}>
                 <Header
                     leftIcon={
                         <FoundationIcon name="home" size={30} color={Colors.GRAY_5} />
                     }
                     leftFocus={goHome}
+                    centerFocus={goHome}
                 />
                 <View style={styles.viewImge}>
                     <Image source={{ uri: IMAGE_TEXT_WELLCOME }} style={styles.imgWellcome} />
@@ -44,33 +96,31 @@ const Login: React.FC<AuthenStackScreenProps<'LogIn'>> = ({ navigation, route })
                     title='Số điện thoại'
                     placeholder='Nhập số điện thoại của bạn'
                     input={{
+                        keyboardType: 'phone-pad',
+                        value: phone,
                         onChangeText: (text) => { setPhone(text) }
                     }} />
                 <View style={styles.footer}>
                     <Image source={{ uri: IMAGE_FOOTER_AUTHEN }} style={styles.imgFooter} />
                     <View style={styles.boxButton}>
-                    <View style={styles.Button}>
                         <ButtonLogin
                             backgroundImage={BUTTON_BLUE}
                             titleStyle={styles.titleLogin}
                             title='Đăng nhập'
                             onPress={logIn}
                         />
-                        </View>
                         <Text style={styles.txtOr} >Hoặc</Text>
-                        <View style={styles.Button}>
                         <ButtonRegister
                             backgroundImage={BUTTON_WHITE}
                             titleStyle={styles.titleRegister}
                             title='Đăng kí'
                             onPress={register}
                         />
-                        </View>
-                        
                     </View>
                 </View>
             </View>
-        </ScrollView>
+        </Background>
+
     )
 }
 
@@ -91,8 +141,7 @@ const styles = StyleSheet.create({
     imgWellcome: {
         resizeMode: 'contain',
         width: Dimensions.get('screen').width * 0.9,
-        height: Dimensions.get('screen').height * 0.15,
-        marginTop: Dimensions.get('screen').height * 0.1
+        height: Dimensions.get('screen').height * 0.15
     },
     txtLogin: {
         width: Dimensions.get('screen').width,
@@ -101,19 +150,17 @@ const styles = StyleSheet.create({
         lineHeight: 26.4,
         textAlign: 'center',
         color: Colors.BLUE_500,
-        marginTop: Dimensions.get('screen').height * 0.1
+        marginTop: Dimensions.get('screen').height * 0.03
     },
     footer: {
         position: 'absolute',
-        width: Dimensions.get('screen').width ,
+        width: Dimensions.get('screen').width,
         bottom: 0,
-       
     },
     imgFooter: {
         resizeMode: 'contain',
         width: Dimensions.get('screen').width,
-        height: Dimensions.get('screen').height * 0.42,
-       
+        height: Dimensions.get('screen').height * 0.45,
     },
     boxButton: {
         position: 'absolute',
@@ -121,14 +168,11 @@ const styles = StyleSheet.create({
         height: Dimensions.get('screen').height * 0.2,
         padding: Dimensions.get('screen').width * 0.04,
         bottom: Dimensions.get('screen').height * 0.05,
-        alignItems: 'center'
     },
-    Button:{
-        width: Dimensions.get('screen').width*1,
-        height: Dimensions.get('screen').height * 0.07,
-        
+    btnLogin: {
+        backgroundColor: Colors.BLUE_500,
+        borderColor: Colors.BLUE_500
     },
-    
     titleLogin: {
         color: Colors.WHITE,
     },
@@ -140,7 +184,10 @@ const styles = StyleSheet.create({
         color: Colors.GRAY_5,
         marginVertical: Dimensions.get('screen').height * 0.01,
     },
-   
+    btnRegister: {
+        backgroundColor: Colors.GRAY_1,
+        borderColor: Colors.GRAY_1
+    },
     titleRegister: {
         color: Colors.BLUE_KV,
     }

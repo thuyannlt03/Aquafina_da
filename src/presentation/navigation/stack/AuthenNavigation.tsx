@@ -4,25 +4,15 @@ type LoginProps = {
 };
 type RegisterProps = {
 };
-type RegisterOTPProps = {
-    phone: string,
-};
-
-type LoginOTPProps = {
-    phone: string,
-};
-
-type  RegisterSuccessProps = {
-};
+type SendOTPProps = {}
 
 
 
 export type AuthenStackParamList = {
     LogIn: LoginProps | undefined; 
     Register: RegisterProps | undefined;
-    LoginOTP: LoginOTPProps | undefined;
-    RegisterOTP: RegisterOTPProps | undefined;
-    RegisterSuccess: RegisterSuccessProps | undefined;
+    SendOTP: SendOTPProps | undefined;
+    
 };
 
 export type AuthenStackNavigation = StackNavigationProp<AuthenStackParamList>;

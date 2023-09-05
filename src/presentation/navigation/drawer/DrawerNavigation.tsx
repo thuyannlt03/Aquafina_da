@@ -17,20 +17,16 @@ type LoginProps = {};
 
 type RegisterProps = {};
 
-type RegisterOTPProps = {
-    phone: string,
+type SendOTPProps = {
+    phone?: string;
+    name?: string;
+    type?: string;
 };
-
-type LoginOTPProps = {
-    phone: string,
-};
-
-type  RegisterSuccessProps = {
-};
-
-
 
 type RuleProps = {};
+
+type ReportErrorProps ={}
+
 
 export type HomeDrawerParamList = {
     Home: HomeProps | undefined,
@@ -40,11 +36,10 @@ export type HomeDrawerParamList = {
     PureCoin: PureCoinProps | undefined,
     PureChart: PureChartProps | undefined
     LogIn: LoginProps | undefined;
+    SendOTP: SendOTPProps | undefined;
     Register: RegisterProps | undefined;
-    LoginOTP: LoginOTPProps | undefined;
-    RegisterOTP: RegisterOTPProps | undefined;
-    RegisterSuccess: RegisterSuccessProps | undefined;
-    Rule: RuleProps | undefined;
+    Rules: RuleProps | undefined;
+    ReportError : ReportErrorProps | undefined;
 };
 
 export type HomeDrawerNavigation = DrawerNavigationProp<HomeDrawerParamList>;

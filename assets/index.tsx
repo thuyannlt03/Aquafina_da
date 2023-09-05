@@ -103,6 +103,7 @@ export const ICON_CHART = 'https://firebasestorage.googleapis.com/v0/b/aquafina-
 
 export const ICON_CHART_FOCUS = 'https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/Icon-Chart_Focus.png?alt=media&token=f0a15548-b356-4af2-ab7d-848ccba2084b'
 
+export const IMAGE_POPUP_HAPPY = 'https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/Image-Banner_4.png?alt=media&token=0952a1d0-1d3e-4203-9a36-dc1a8d1d7558'
 
 export const AOKHOAC = 'https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/card1.png?alt=media&token=ba8f2805-99a4-40a1-9013-8f41f4b43840'
 export const AOTHUN = 'https://firebasestorage.googleapis.com/v0/b/aquafina-8f8ce.appspot.com/o/card3.png?alt=media&token=3c11af3a-8abc-4a7a-a314-976d279652c3'

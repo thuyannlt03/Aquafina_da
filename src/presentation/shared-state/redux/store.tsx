@@ -3,6 +3,8 @@ import { userReducer } from '../redux/reducers/UserReducer';
 import { useDispatch } from 'react-redux';
 import { bannerReducer } from './reducers/BannerReducer';
 import { quantityGiftReducer } from './reducers/QuantityGift';
+import { giftReducer } from './reducers/GiftReducer';
+
 
 export const store = configureStore({
     reducer: {
