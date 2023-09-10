@@ -576,7 +576,7 @@ const Rules: React.FC<HomeDrawerScreenProps<'Rules'>> = ({ route, navigation }) 
               <Text style={styles.text2}>để quy đổi được quy định chi tiết theo bảng dưới đây</Text>
               <View style={styles.item}>
                 <View style={styles.card}>
-                  <Image source={AOKHOAC} style={styles.image} />
+                  <Image source={{ uri: AOKHOAC}} style={styles.image} />
                   <View style={styles.gr}>
                     <Text style={styles.textcard}>Áo khoác cape</Text>
                     <Text style={styles.textcard1}>Aquafina x Headless</Text>
@@ -590,7 +590,7 @@ const Rules: React.FC<HomeDrawerScreenProps<'Rules'>> = ({ route, navigation }) 
                   </View>
                 </View>
                 <View style={styles.card}>
-                  <Image source={TUI} style={styles.imaget} />
+                  <Image source={{ uri: TUI}} style={styles.imaget} />
                   <View style={styles.gr}>
                     <Text style={styles.textcard3}>Túi Tote</Text>
                     <Text style={styles.textcard4}>Aquafina x Headless</Text>
@@ -611,7 +611,7 @@ const Rules: React.FC<HomeDrawerScreenProps<'Rules'>> = ({ route, navigation }) 
 
               <View style={styles.item}>
                 <View style={styles.card}>
-                  <Image source={AOTHUN} style={styles.image} />
+                  <Image source={{ uri: AOTHUN}} style={styles.image} />
                   <View style={styles.gr}>
                     <Text style={styles.textcard}>Áo thun</Text>
                     <Text style={styles.textcard1}>Aquafina x Headless</Text>
@@ -626,7 +626,7 @@ const Rules: React.FC<HomeDrawerScreenProps<'Rules'>> = ({ route, navigation }) 
                   </View>
                 </View>
                 <View style={styles.card}>
-                  <Image source={NON} style={styles.imagen} />
+                  <Image source={{ uri: NON}} style={styles.imagen} />
                   <View style={styles.gr}>
                     <Text style={styles.textcard6}>Nón Aquafina x Headless</Text>
                     <Text style={styles.textcard7}>Số lượng quà tặng </Text>
@@ -643,7 +643,7 @@ const Rules: React.FC<HomeDrawerScreenProps<'Rules'>> = ({ route, navigation }) 
               </View>
               <View style={styles.item}>
                 <View style={styles.card}>
-                  <Image source={VO} style={styles.image} />
+                  <Image source={{ uri: VO}}style={styles.image} />
                   <View style={styles.gr}>
                     <Text style={styles.textcard}>Vớ Aquafina x Repeet</Text>
                     <Text style={styles.textcard2}>Số lượng quà tặng </Text>
@@ -657,7 +657,7 @@ const Rules: React.FC<HomeDrawerScreenProps<'Rules'>> = ({ route, navigation }) 
                   </View>
                 </View>
                 <View style={styles.card}>
-                  <Image source={TUIS} style={styles.imaget} />
+                  <Image source={{ uri: TUIS}} style={styles.imaget} />
                   <View style={styles.gr}>
                     <Text style={styles.textcard}>Túi Tote</Text>
                     <Text style={styles.textcard1}>Aquafina x Headless</Text>
@@ -678,7 +678,7 @@ const Rules: React.FC<HomeDrawerScreenProps<'Rules'>> = ({ route, navigation }) 
             <ImageBackground source={{ uri: IMAGE_RIPPLE_RING }} style={styles.imageBottleAquafina3}>
               <View style={styles.item}>
                 <View style={styles.card}>
-                  <Image source={VE} style={styles.imagea} />
+                  <Image source={{ uri: VE}} style={styles.imagea} />
                   <View style={styles.gr}>
                     <Text style={styles.textcard}>Voucher xem phim tại</Text>
                     <Text style={styles.textcard1}>rạp chiếu phim Lotte</Text>

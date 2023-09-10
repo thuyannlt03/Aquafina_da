@@ -176,12 +176,14 @@ const SendOTP: React.FC<HomeDrawerScreenProps<'SendOTP'>> = ({ route, navigation
                             <View style={styles.footer}>
                                 <Image source={{ uri: IMAGE_FOOTER_AUTHEN }} style={styles.imgFooter} />
                                 <LinearGradient colors={[Colors.WHITE_0, Colors.WHITE_93, Colors.WHITE]} style={styles.boxButton}>
+                                <View style={styles.Button}>
                                     <ButtonLogin
                                         backgroundImage={BUTTON_BLUE}
                                         titleStyle={styles.titleLogin}
                                         title='Đăng nhập'
                                         onPress={logIn}
                                     />
+                                    </View>
                                 </LinearGradient>
                             </View>
                         </View>
